@@ -1,6 +1,7 @@
 # plotly 
-streamlit == 0.74.1
-pandas == 1.2.0 
+streamlit == 1.23.0
+openpyxl == 3.1.2 
+# pandas == 1.2.0 
 # Pillow 
 # pyxlsb 
 # plotly.express

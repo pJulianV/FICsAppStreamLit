@@ -1,5 +1,5 @@
-# streamlit run main.py
-# pip install -r requeriments.txt
+# streamlit run streamlit_app.py
+# pip install -r requirements.txt
 
 # cd OneDrive - Grupo Bancolombia\Workspace\PruebaStreamLit
 # cd Workspace\FIC StreamLit
@@ -24,7 +24,7 @@ from pandas.api.types import (
 st.set_page_config(
     page_title="FICs App",
     page_icon="📈",
-    layout="wide",
+    # layout="wide",
     initial_sidebar_state="expanded",
 
 )
@@ -42,7 +42,7 @@ with open("InformeFICs.xlsx", 'rb') as my_file:
 
 customized_button = st.markdown("""
     <style >
-    # .stDownloadButton, div.stButton {text-align:center}
+    .<stDownloadButton, div.stButton {text-align:center}
     .stDownloadButton button, div.stButton > button:first-child {
         background-color: #ff4b4b;
         color:#ffffff;
