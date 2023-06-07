@@ -1,8 +1,7 @@
-plotly 
+# plotly 
 streamlit 
 pandas 
-Pillow 
-pyxlsb 
-streamlit
-plotly.express
-PIL
+# Pillow 
+# pyxlsb 
+# plotly.express
+# PIL
