@@ -1,0 +1,8 @@
+plotly 
+streamlit 
+pandas 
+Pillow 
+pyxlsb 
+streamlit
+plotly.express
+PIL
