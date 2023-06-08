@@ -6,7 +6,7 @@
 
 import pandas as pd
 from io import BytesIO
-from pyxlsb import open_workbook as open_xlsb
+# from pyxlsb import open_workbook as open_xlsb
 import streamlit as st
 
 # import plotly.express as px
