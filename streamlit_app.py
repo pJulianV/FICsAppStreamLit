@@ -6,11 +6,12 @@
 
 import pandas as pd
 from io import BytesIO
-# from pyxlsb import open_workbook as open_xlsb
+from pyxlsb import open_workbook as open_xlsb
 import streamlit as st
 
 # import plotly.express as px
 # from PIL import Image
+
 
 from pandas.api.types import (
     is_categorical_dtype,
@@ -30,6 +31,40 @@ st.set_page_config(
 )
 
 
+customized_button = st.markdown("""
+    <style >
+    # .stDownloadButton, div.stButton {text-align:center}
+    .stDownloadButton button, div.stButton > button:first-child {
+        background-color: #ff4b4b;
+        color:#ffffff;
+        padding-left: 20px;
+        padding-right: 20px;
+        transition: opacity 0.5s ease-in-out;
+    }
+    
+    .css-1n543e5:focus:not(:active) {
+    border-color: rgb(255, 75, 75);
+    color: #ffffff;
+    }
+
+    .stDownloadButton button:hover, div.stButton > button:hover {
+        font-size: 2.5rem;
+        background-color: #ffffff;
+        color: #ff4b4b;
+        border-color: #ff4b4b;
+    }
+    .stDownloadButton button:focus:not(:active) {
+        background-color: #ffffff;
+        color: #ff4b4b;
+        border-color: #ff4b4b;
+    }
+    .stDownloadButton button:visited {
+        background-color: #ff4b4b;
+        color: #ffffff;
+        border-color: #ff4b4b;
+    }
+        }
+    </style>""", unsafe_allow_html=True)
 
 
 st.header("📈 FICs App")
@@ -39,31 +74,6 @@ st.text(" ")
 with open("InformeFICs.xlsx", 'rb') as my_file:
     st.download_button(label = 'Nuestros Sugeridos', data = my_file, file_name = 'FondosSugeridos.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-
-customized_button = st.markdown("""
-    <style >
-    .<stDownloadButton, div.stButton {text-align:center}
-    .stDownloadButton button, div.stButton > button:first-child {
-        background-color: #ff4b4b;
-        color:#ffffff;
-        padding-left: 20px;
-        padding-right: 20px;
-        transition: opacity 0.5s ease-in-out;
-    }
-    
-    .stDownloadButton button:hover, div.stButton > button:hover {
-        font-size: 2.5rem;
-        background-color: #ffffff;
-        color: #ff4b4b;
-        border-color: #ff4b4b;
-    }
-    .stDownloadButton button:active {
-        background-color: #ff4b4b;
-        color: #ffffff;
-        border-color: #ff4b4b;
-    }
-        }
-    </style>""", unsafe_allow_html=True)
 
 
 
@@ -95,10 +105,11 @@ df = pd.read_excel(excel_file,
 # st.markdown(f"*Avaliable Results: {number_of_result}*")
 
 dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
-dfNoDupl[['Nombre Entidad','Nombre Negocio']]
+st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
+
 
 # fondo_tipo = df["Tipo Fondo"].unique().tolist()
-fondo_tipo = ["Todo", "Renta Fija", "Balanceados","Acciones"]
+fondo_tipo = ["Todo", "Renta Fija", "Balanceados","Acciones","1525"]
 fondo_tipo_selection = st.multiselect("Tipo Fondo: ",
                                  fondo_tipo,
                                  default=fondo_tipo[0])
@@ -179,9 +190,12 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 df_downl =filter_dataframe(df)
 
 df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre Negocio"], keep='first')
-st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio']])
+
+st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio']],  hide_index=True )
 
 
+
+# Descargar por CSV
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8')
 
@@ -197,3 +211,23 @@ st.download_button(
    "text/csv",
    key='download-csv'
 )
+
+
+# Descarcar en Excel
+
+
+# def to_excel(df):
+#     output = BytesIO()
+#     writer = pd.ExcelWriter(output, engine='xlsxwriter')
+#     df.to_excel(writer, index=False, sheet_name='Sheet1')
+#     workbook = writer.book
+#     worksheet = writer.sheets['Sheet1']
+#     format1 = workbook.add_format({'num_format': '0.00'}) 
+#     worksheet.set_column('A:A', None, format1)  
+#     writer.save()
+#     processed_data = output.getvalue()
+#     return processed_data
+# df_xlsx = to_excel(df)
+# st.download_button(label='📥 Download Current Result',
+#                                 data=df_xlsx ,
+#                                 file_name= 'df_test.xlsx')
