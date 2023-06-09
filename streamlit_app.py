@@ -112,7 +112,7 @@ st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
 fondo_tipo = ["Todo", "Renta Fija", "Balanceados","Acciones","1525"]
 fondo_tipo_selection = st.multiselect("Tipo Fondo: ",
                                  fondo_tipo,
-                                 default=fondo_tipo[0])
+                                 default=fondo_tipo[1])
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
