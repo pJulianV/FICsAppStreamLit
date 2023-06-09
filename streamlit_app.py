@@ -10,7 +10,7 @@ import pandas as pd
 import streamlit as st
 
 # import plotly.express as px
-# from PIL import Image
+from PIL import Image
 
 
 from pandas.api.types import (
@@ -22,9 +22,11 @@ from pandas.api.types import (
 
 
 
+
+
 st.set_page_config(
     page_title="FICs App",
-    page_icon="📈",
+    page_icon="img/LogoBancolombiaNegro.png",
     # layout="wide",
     initial_sidebar_state="expanded",
 
@@ -67,17 +69,50 @@ customized_button = st.markdown("""
     </style>""", unsafe_allow_html=True)
 
 
-st.header("📈 FICs App")
-st.subheader("Descargue nuestros fondos sugeridos o seleccione los que usted desee\n")
+
+empty_left, contents, empty_right = st.columns([0.55, 3, 0.1])
+
+with contents:
+    st.header("Explora Fondos a tu Medida 📈")
+    
 st.text(" ")
 
-with open("InformeFICs.xlsx", 'rb') as my_file:
-    st.download_button(label = 'Nuestros Sugeridos', data = my_file, file_name = 'FondosSugeridos.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-
-
+img = Image.open("img/investment3.jpeg")
+st.image(img, use_column_width=True)
 
 st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+empty_left, contents, empty_right = st.columns([0.65, 3, 0.1])
+
+with contents:
+    st.subheader("Descargue nuestros :red[_fondos sugeridos_]")
+
+st.text(" ")
+
+
+col1, col2, col3 = st.columns([1.2, 2, 0.1])
+
+
+with col2:
+    with open("InformeFICs.xlsx", 'rb') as my_file:
+        st.download_button(label = 'Nuestros Sugeridos', data = my_file, file_name = 'FondosSugeridos.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
 
 excel_file = "InformeFICs.xlsx"
 sheet_name = "Hoja1"
@@ -104,8 +139,38 @@ df = pd.read_excel(excel_file,
 # number_of_result = df[mask].shape[0]
 # st.markdown(f"*Avaliable Results: {number_of_result}*")
 
+
+
+empty_left, contents, empty_right = st.columns([1.1, 2, 0.1])
+
+with contents:
+    st.subheader("_Nuestros Fondos_")
+
+st.text(" ")
+
 dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
+
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+
+empty_left, contents, empty_right = st.columns([0.75, 3, 0.1])
+
+with contents:
+    st.subheader("Seleccione los que usted desee 🔍")
+    
+empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+
+with contents:
+    st.markdown("O escriba para buscar coincidencias")
+
+
+
 
 
 # fondo_tipo = df["Tipo Fondo"].unique().tolist()
@@ -145,8 +210,11 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             user_cat_input = right.multiselect(
                     f"{column}",
                     df[column].unique(),
-                    default=df[column][1],
+                    default=(df[column].to_list())[273],
+                    
                 )
+            
+            
             df = df[df[column].isin(user_cat_input)]
             # elif is_numeric_dtype(df[column]):
             #     _min = float(df[column].min())
@@ -191,6 +259,7 @@ df_downl =filter_dataframe(df)
 
 df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
+
 st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio']],  hide_index=True )
 
 
@@ -204,13 +273,17 @@ csv = convert_df(df_downl)
 
 st.text(" ")
 
-st.download_button(
-   "Press to Download",
-   csv,
-   "MisFondos.csv",
-   "text/csv",
-   key='download-csv'
-)
+col1, col2, col3 = st.columns(3)
+
+
+with col2:
+    st.download_button(
+    "Generar Informe",
+    csv,
+    "MisFondos.csv",
+    "text/csv",
+    key='download-csv'
+    )
 
 
 # Descarcar en Excel
