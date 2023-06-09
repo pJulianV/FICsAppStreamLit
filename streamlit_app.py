@@ -112,7 +112,7 @@ st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
 fondo_tipo = ["Todo", "Renta Fija", "Balanceados","Acciones","1525"]
 fondo_tipo_selection = st.multiselect("Tipo Fondo: ",
                                  fondo_tipo,
-                                 default=fondo_tipo[1])
+                                 default=fondo_tipo[0])
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
@@ -145,7 +145,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             user_cat_input = right.multiselect(
                     f"{column}",
                     df[column].unique(),
-                    default=df[column][0],
+                    default=df[column][1],
                 )
             df = df[df[column].isin(user_cat_input)]
             # elif is_numeric_dtype(df[column]):
