@@ -172,7 +172,7 @@ for i in range(280):
         df.at[i, 'ASSET_CLASS'] = tipoFondo
     else:
         nombreFondo
-        df.at[i, 'ASSET_CLASS'] = "OTROS"
+        df.at[i, 'ASSET_CLASS'] = "ACCIONES"
 
 
 st.dataframe(df [['Nombre Negocio', 'ASSET_CLASS']], hide_index=True )
