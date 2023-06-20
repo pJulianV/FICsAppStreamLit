@@ -1,12 +1,25 @@
-# streamlit run streamlit_app.py
-# pip install -r requirements.txt
-
 # cd OneDrive - Grupo Bancolombia\Workspace\PruebaStreamLit
 # cd Workspace\FIC StreamLit
 
+# pip install -r requirements.txt
+
+
+# pip install ______ -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
+
+# pip install -r requirements.txt -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
+
+
+
+# streamlit run streamlit_app.py
+
+# Los Dataframe con terminacion "NoDupl" es para la visualizacion NO USAR en el excel final
+
+
 import pandas as pd
-# from io import BytesIO
+from io import BytesIO
 # from pyxlsb import open_workbook as open_xlsb
+
+from xlsxwriter import Workbook
 import streamlit as st
 
 # import plotly.express as px
@@ -19,8 +32,6 @@ from pandas.api.types import (
     is_numeric_dtype,
     is_object_dtype,
 )
-
-
 
 
 
@@ -100,9 +111,10 @@ st.text(" ")
 
 col1, col2, col3 = st.columns([1.2, 2, 0.1])
 
+excel_file = "InformeFICsAbril2023.xlsx"
 
 with col2:
-    with open("InformeFICs.xlsx", 'rb') as my_file:
+    with open(excel_file, 'rb') as my_file:
         st.download_button(label = 'Nuestros Sugeridos', data = my_file, file_name = 'FondosSugeridos.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     
 st.text(" ")
@@ -114,7 +126,6 @@ st.text(" ")
 st.text(" ")
 
 
-excel_file = "InformeFICs.xlsx"
 sheet_name = "Hoja1"
 
 df = pd.read_excel(excel_file,
@@ -123,7 +134,61 @@ df = pd.read_excel(excel_file,
                    )
 
 
+dfTiposFondos = pd.read_excel("TiposFondos.xlsx",
+                           sheet_name= "Hoja1",
+                           header= 0)
 
+dfTiposFondosNoDupl = dfTiposFondos.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+
+
+# Emparejar fondo con su tipo:
+
+df = df.assign(ASSET_CLASS= "" )
+
+nombreFondos70 = df["Nombre Negocio"].unique().tolist()
+
+nombresDBTiposFondos = dfTiposFondos["Nombre Negocio"].unique().tolist()
+
+
+listaTiposFondos = dfTiposFondos["ASSET_CLASS.ASSET CLASS"].unique().tolist()
+
+
+diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['Nombre Negocio'],
+                                  dfTiposFondosNoDupl['ASSET_CLASS.ASSET CLASS']
+                                  ))
+
+
+df['ASSET_CLASS'].update(pd.Series(diccionarioTiposFondos))
+
+
+
+for i in range(280):
+
+    nombreFondo = df["Nombre Negocio"][i]
+    
+    if nombreFondo in diccionarioTiposFondos:
+    
+        tipoFondo= diccionarioTiposFondos[nombreFondo]
+        df.at[i, 'ASSET_CLASS'] = tipoFondo
+    else:
+        nombreFondo
+        df.at[i, 'ASSET_CLASS'] = "OTROS"
+
+
+st.dataframe(df [['Nombre Negocio', 'ASSET_CLASS']], hide_index=True )
+
+
+
+# dfSIF2022 = pd.read_excel("SIF_BD_2022.xlsx",
+#                           sheet_name= "Sheet1",
+#                           header= 0)
+
+# dfSIF2022
+# dfSIF2023
+# # dfSIF = pd.concat([dfSIF2022, dfSIF2023], axis=0)
+
+# dfSIF = dfSIF2022.append(dfSIF2023)
+# dfSIF
 
 # fondo = df["Nombre Negocio"].unique().tolist()
 
@@ -144,7 +209,7 @@ df = pd.read_excel(excel_file,
 empty_left, contents, empty_right = st.columns([1.1, 2, 0.1])
 
 with contents:
-    st.subheader("_Nuestros Fondos_")
+    st.subheader("_Nuestros Sugeridos_")
 
 st.text(" ")
 
@@ -154,9 +219,29 @@ st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
 st.text(" ")
 st.text(" ")
 st.text(" ")
+
+
+empty_left, contents, empty_right = st.columns([0.6, 2, 0.1])
+
+with contents:
+    st.subheader("_Todos Los Fondos Disponibles_")
+
+
+# dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
+#                            sheet_name= "Sheet1",
+#                            header= 0)
+
+# dfSIF2023NoDupl = df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+# st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
+
 st.text(" ")
 st.text(" ")
 st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+
 
 
 empty_left, contents, empty_right = st.columns([0.75, 3, 0.1])
@@ -173,15 +258,13 @@ with contents:
 
 
 
-# fondo_tipo = df["Tipo Fondo"].unique().tolist()
-fondo_tipo = ["Todo", "Renta Fija", "Balanceados","Acciones","1525"]
-fondo_tipo_selection = st.multiselect("Tipo Fondo: ",
-                                 fondo_tipo,
-                                 default=fondo_tipo[0])
-
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
+    modify = st.checkbox("Add filters")
 
+    if not modify:
+        return df 
+    
     df = df.copy()
     # Try to convert datetimes into a standard format (datetime, no timezone)
     for col in df.columns:
@@ -196,21 +279,23 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     modification_container = st.container()
 
-
+    dfColumns = ["ASSET_CLASS", "Nombre Negocio"]
     with modification_container:
-        to_filter_columns = ["Nombre Negocio"]
-                            # st.multiselect("Filtrar Por", df.columns)
+        
+        
+        to_filter_columns = st.multiselect("Filtrar por: ", dfColumns)
         for column in to_filter_columns:
+        
             left, right = st.columns((1, 20))
             left.write("↳")
             # Treat columns with < 10 unique values as categorical
             
             # if is_categorical_dtype(df[column]) or df[column].nunique() < 10:
-                
+
             user_cat_input = right.multiselect(
                     f"{column}",
                     df[column].unique(),
-                    default=(df[column].to_list())[273],
+                    default=(df[column].to_list())[0],
                     
                 )
             
@@ -260,7 +345,7 @@ df_downl =filter_dataframe(df)
 df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio']],  hide_index=True )
+st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio', "ASSET_CLASS"]],  hide_index=True )
 
 
 
@@ -276,18 +361,29 @@ st.text(" ")
 col1, col2, col3 = st.columns(3)
 
 
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    format1 = workbook.add_format({'num_format': '0.00'}) 
+    worksheet.set_column('A:A', None, format1)  
+    writer.close()
+    processed_data = output.getvalue()
+    return processed_data
+
+
+
+
 with col2:
-    st.download_button(
-    "Generar Informe",
-    csv,
-    "MisFondos.csv",
-    "text/csv",
-    key='download-csv'
-    )
+    st.download_button(label='Generar Informe',
+                                    data=to_excel(df_downl) ,
+                                    file_name= 'MisFondos.xlsx')
+
 
 
 # Descarcar en Excel
-
 
 # def to_excel(df):
 #     output = BytesIO()
@@ -301,6 +397,7 @@ with col2:
 #     processed_data = output.getvalue()
 #     return processed_data
 # df_xlsx = to_excel(df)
+
 # st.download_button(label='📥 Download Current Result',
 #                                 data=df_xlsx ,
 #                                 file_name= 'df_test.xlsx')
