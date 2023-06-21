@@ -1,8 +1,10 @@
+# ! Las dependencia, rutas y codigos que se usaran en la terminal de anaconda
+
 # cd OneDrive - Grupo Bancolombia\Workspace\PruebaStreamLit
 # cd Workspace\FIC StreamLit
 
-# pip install -r requirements.txt
 
+# pip install -r requirements.txt
 
 # pip install ______ -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
 
@@ -12,7 +14,7 @@
 
 # streamlit run streamlit_app.py
 
-# Los Dataframe con terminacion "NoDupl" es para la visualizacion NO USAR en el excel final
+# ! Los Dataframe con terminacion "NoDupl" es para la visualizacion NO USAR en el excel final
 
 
 import pandas as pd
@@ -92,40 +94,8 @@ st.text(" ")
 img = Image.open("img/investment3.jpeg")
 st.image(img, use_column_width=True)
 
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-
-empty_left, contents, empty_right = st.columns([0.65, 3, 0.1])
-
-with contents:
-    st.subheader("Descargue nuestros :red[_fondos sugeridos_]")
-
-st.text(" ")
-
-
-col1, col2, col3 = st.columns([1.2, 2, 0.1])
 
 excel_file = "InformeFICsAbril2023.xlsx"
-
-with col2:
-    with open(excel_file, 'rb') as my_file:
-        st.download_button(label = 'Nuestros Sugeridos', data = my_file, file_name = 'FondosSugeridos.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-
-
 sheet_name = "Hoja1"
 
 df = pd.read_excel(excel_file,
@@ -133,6 +103,7 @@ df = pd.read_excel(excel_file,
                    header=0
                    )
 
+dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 dfTiposFondos = pd.read_excel("TiposFondos.xlsx",
                            sheet_name= "Hoja1",
@@ -141,7 +112,7 @@ dfTiposFondos = pd.read_excel("TiposFondos.xlsx",
 dfTiposFondosNoDupl = dfTiposFondos.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-# Emparejar fondo con su tipo:
+# ! Emparejar fondo con su tipo:
 
 df = df.assign(ASSET_CLASS= "" )
 
@@ -158,11 +129,11 @@ diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['Nombre Negocio'],
                                   ))
 
 
-df['ASSET_CLASS'].update(pd.Series(diccionarioTiposFondos))
 
+rowCountdf = df.shape[0]
 
+for i in range(rowCountdf):
 
-for i in range(280):
 
     nombreFondo = df["Nombre Negocio"][i]
     
@@ -171,17 +142,11 @@ for i in range(280):
         tipoFondo= diccionarioTiposFondos[nombreFondo]
         df.at[i, 'ASSET_CLASS'] = tipoFondo
     else:
-        nombreFondo
-        df.at[i, 'ASSET_CLASS'] = "ACCIONES"
-
-
-st.dataframe(df [['Nombre Negocio', 'ASSET_CLASS']], hide_index=True )
+        df.at[i, 'ASSET_CLASS'] = "INDEFINIDO"
 
 
 
-# dfSIF2022 = pd.read_excel("SIF_BD_2022.xlsx",
-#                           sheet_name= "Sheet1",
-#                           header= 0)
+
 
 # dfSIF2022
 # dfSIF2023
@@ -204,27 +169,41 @@ st.dataframe(df [['Nombre Negocio', 'ASSET_CLASS']], hide_index=True )
 # number_of_result = df[mask].shape[0]
 # st.markdown(f"*Avaliable Results: {number_of_result}*")
 
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
 
-
-empty_left, contents, empty_right = st.columns([1.1, 2, 0.1])
+empty_left, contents, empty_right = st.columns([0.65, 3, 0.1])
 
 with contents:
-    st.subheader("_Nuestros Sugeridos_")
+    st.subheader("Descargue nuestros :red[_fondos sugeridos_]")
 
 st.text(" ")
 
-dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
-st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
 
+col1, col2, col3 = st.columns([1.2, 2, 0.1])
+
+
+with col2:
+    with open(excel_file, 'rb') as my_file:
+        st.download_button(label = 'Descargar Sugeridos', data = my_file, file_name = 'FondosSugeridos.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    
 st.text(" ")
 st.text(" ")
 st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
 
 
-empty_left, contents, empty_right = st.columns([0.6, 2, 0.1])
-
-with contents:
-    st.subheader("_Todos Los Fondos Disponibles_")
 
 
 # dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
@@ -234,20 +213,15 @@ with contents:
 # dfSIF2023NoDupl = df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 # st.dataframe(dfNoDupl[['Nombre Entidad','Nombre Negocio']], hide_index=True )
 
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
 
 
 
 
-empty_left, contents, empty_right = st.columns([0.75, 3, 0.1])
+
+empty_left, contents, empty_right = st.columns([0.45, 3, 0.1])
 
 with contents:
-    st.subheader("Seleccione los que usted desee 🔍")
+    st.subheader("Filtre y Seleccione los que usted desee 🔍")
     
 empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
 
@@ -349,7 +323,7 @@ st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio', "ASSET_CLASS"]],
 
 
 
-# Descargar por CSV
+# ! Descargar por CSV
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8')
 
@@ -360,7 +334,7 @@ st.text(" ")
 
 col1, col2, col3 = st.columns(3)
 
-
+# ! Descargar por Excel
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -401,3 +375,74 @@ with col2:
 # st.download_button(label='📥 Download Current Result',
 #                                 data=df_xlsx ,
 #                                 file_name= 'df_test.xlsx')
+
+
+
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+
+empty_left, contents, empty_right = st.columns([0.6, 2, 0.1])
+
+with contents:
+    st.subheader("_Todos Los Fondos Disponibles_")
+
+
+dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
+                          sheet_name= "Sheet1",
+                          header= 0)
+
+rowCount2023 = dfSIF2023.shape[0]
+
+dfSIF2023 = dfSIF2023.assign(ASSET_CLASS= "" )
+
+
+
+
+
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["Nombre Negocio"][i]
+    
+    if nombreFondo in diccionarioTiposFondos:
+    
+        tipoFondo= diccionarioTiposFondos[nombreFondo]
+        dfSIF2023.at[i, 'ASSET_CLASS'] = tipoFondo
+    else:
+        dfSIF2023.at[i, 'ASSET_CLASS'] = "INDEFINIDO"
+
+
+
+dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+
+st.dataframe(dfSIF2023NoDupl [['Nombre Negocio', "ASSET_CLASS"]], hide_index=True )
+
+
+fondosCount2023 = dfSIF2023NoDupl.shape[0]
+
+st.markdown("Hay")
+fondosCount2023
+st.markdown("en SIF 2023")
+
+
+
+# ! MODELO.xlsb para sacar las volatilidades y veces negativas
+
+excel_modelo = "MODELO.xlsb"
+
+dfVolatilidades = pd.read_excel(excel_modelo,
+                   sheet_name= "R_diarias",
+                   header=17
+                   )
+
+dfVecesNegativo = pd.read_excel(excel_modelo,
+                   sheet_name= "R_diarias",
+                   header=28
+                   )
+
+dfVolatilidades
+dfVecesNegativo

@@ -1,0 +1,5 @@
+Streamlit - Excel
+https://www.youtube.com/watch?v=7zeAIEPJaoQ&ab_channel=CodingIsFun
+
+Generate CSV Link con Google Sheets
+https://www.youtube.com/watch?v=fOg2nvHkfT8&ab_channel=smackcoders
