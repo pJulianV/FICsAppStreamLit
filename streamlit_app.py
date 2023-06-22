@@ -1,4 +1,4 @@
-# ! Las dependencia, rutas y codigos que se usaran en la terminal de anaconda
+# ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
 # cd OneDrive - Grupo Bancolombia\Workspace\PruebaStreamLit
 # cd Workspace\FIC StreamLit
@@ -332,7 +332,6 @@ csv = convert_df(df_downl)
 
 st.text(" ")
 
-col1, col2, col3 = st.columns(3)
 
 # ! Descargar por Excel
 def to_excel(df):
@@ -349,6 +348,7 @@ def to_excel(df):
 
 
 
+col1, col2, col3 = st.columns(3)
 
 with col2:
     st.download_button(label='Generar Informe',
@@ -396,12 +396,39 @@ dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
                           sheet_name= "Sheet1",
                           header= 0)
 
-rowCount2023 = dfSIF2023.shape[0]
+# ! Crear Columnas Nuevas
+
+dfSIF2023 = dfSIF2023.rename(columns={'Rentab. año':'RN.Ytd'})
+
+
+dfSIF2023 = dfSIF2023.assign(Rentab_1Y= "" )
+dfSIF2023 = dfSIF2023.assign(Rentab_3Y= "" )
+dfSIF2023 = dfSIF2023.assign(Rentab_5Y= "" )
+dfSIF2023 = dfSIF2023.assign(V_mensual= "" )
+dfSIF2023 = dfSIF2023.assign(V_semestral= "" )
+dfSIF2023 = dfSIF2023.assign(V_Ytd= "" )
+dfSIF2023 = dfSIF2023.assign(V_1Y= "" )
+dfSIF2023 = dfSIF2023.assign(V_3Y= "" )
+dfSIF2023 = dfSIF2023.assign(V_5Y= "" )
+dfSIF2023 = dfSIF2023.assign(Sharpe_1Y= "" )
+dfSIF2023 = dfSIF2023.assign(Sharpe_3Y= "" )
+dfSIF2023 = dfSIF2023.assign(Sharpe_5Y= "" )
+dfSIF2023 = dfSIF2023.assign(Rentab_Neg_semana	= "" )
+dfSIF2023 = dfSIF2023.assign(Rentab_Neg_mes= "" )
+dfSIF2023 = dfSIF2023.assign(Rentab_Neg_YtD= "" )
+dfSIF2023 = dfSIF2023.assign(Rentab_Neg_1Y= "" )
+
 
 dfSIF2023 = dfSIF2023.assign(ASSET_CLASS= "" )
 
+dfSIF2023.columns
 
 
+
+
+
+
+rowCount2023 = dfSIF2023.shape[0]
 
 
 for i in range(rowCount2023):
@@ -436,13 +463,65 @@ excel_modelo = "MODELO.xlsb"
 
 dfVolatilidades = pd.read_excel(excel_modelo,
                    sheet_name= "R_diarias",
-                   header=17
+                   header=17,
+                   usecols = "C:NC",
+                   nrows= 6
                    )
 
 dfVecesNegativo = pd.read_excel(excel_modelo,
                    sheet_name= "R_diarias",
-                   header=28
+                   header=28,
+                   usecols = "C:NC",
+                   nrows= 5
                    )
 
-dfVolatilidades
-dfVecesNegativo
+
+
+
+# dfSIF2023_downl =filter_dataframe(dfSIF2023)
+
+col1, col2, col3 = st.columns(3)
+
+
+
+# for (columnName, columnData) in dfVolatilidades.iteritems(): es igual a excepto con  
+# ! dfVolatilidades
+
+for (columnName, columnData) in dfVecesNegativo.iteritems():
+    
+    for i in range(dfSIF2023.shape[0]):
+        nombreFondo = dfSIF2023["Nombre Negocio"][i]
+
+        if nombreFondo in columnName:
+
+            # dfSIF2023.at["Sharpe_1Y", i] = 
+            # dfSIF2023.at["Sharpe_3Y", i] = 
+            # dfSIF2023.at["Sharpe_5Y", i] = 
+            
+            dfSIF2023.at["V_mensual", i] = dfVolatilidades
+            dfSIF2023.at["V_semestral", i] = dfVolatilidades
+            dfSIF2023.at["V_Ytd", i] = dfVolatilidades
+            dfSIF2023.at["V_1Y", i] = dfVolatilidades
+            dfSIF2023.at["V_3Y", i] = dfVolatilidades
+            dfSIF2023.at["V_5Y", i] = dfVolatilidades
+
+
+            dfSIF2023.at["Rentab_Neg_semana", i] = "Asignacion funciona"
+            dfSIF2023.at["Rentab_Neg_mes", i] = "Asignacion funciona"
+            dfSIF2023.at["Rentab_Neg_YtD", i] = "Asignacion funciona"
+            dfSIF2023.at["Rentab_Neg_1Y", i] = "Asignacion funciona"       # dfVecesNegativo
+
+
+
+        else:
+            dfSIF2023.at["Rentab_Neg_semana", i] = "-"
+            dfSIF2023.at["Rentab_Neg_mes", i] = "-"
+            dfSIF2023.at["Rentab_Neg_YtD", i] = "-"
+            dfSIF2023.at["Rentab_Neg_1Y", i] = "-"
+
+
+
+with col2:
+    st.download_button(label='Generar Informe',
+                                    data=to_excel(dfSIF2023) ,
+                                    file_name= 'SIFInforme.xlsx')
