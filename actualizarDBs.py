@@ -87,6 +87,7 @@ for i in range(rowCount2023):
 
 
 
+
 # ! MODELO.xlsb para sacar las volatilidades y veces negativas
 
 excel_modelo = "MODELO.xlsb"
@@ -134,8 +135,24 @@ def listasADiccionarios(df):
 
 # def asignarValoresColumnas(dfNoDupl):
         # for i in range(dfNoDupl.shape[0]):
-            # nombreFondo = dfNoDupl["Nombre Negocio"][i]
-            # if nombreFondo in columnName:
+
+
+dictVecesNegativo = listasADiccionarios(dfVecesNegativo)
+dictVolatilidad = listasADiccionarios(dfVolatilidades)
+dictRentabilidades =listasADiccionarios(dfRentabilidades)
+
+
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    
+    if nombreFondo in dictVolatilidad:
+    
+        tipoFondo = dictVolatilidad[nombreFondo]
+        dfSIF2023.at[i, 'V_mensual'] = tipoFondo[0]
+    else:
+        dfSIF2023.at[i, 'V_mensual'] = "-"
+
 
                 
             #     dfNoDupl.at["V_mensual", i] = "Asignacion funciona"
@@ -158,34 +175,6 @@ def listasADiccionarios(df):
             #     dfNoDupl.at["Rentab_Neg_1Y", i] = "Asignacion funciona"       
 
 
-
-            # else:
-            #     dfNoDupl.at["Rentab_Neg_semana", i] = "-"
-            #     dfNoDupl.at["Rentab_Neg_mes", i] = "-"
-            #     dfNoDupl.at["Rentab_Neg_YtD", i] = "-"
-            #     dfNoDupl.at["Rentab_Neg_1Y", i] = "-"
-            
-            #     dfNoDupl.at["Sharpe_1Y", i] = "-"
-            #     dfNoDupl.at["Sharpe_3Y", i] = "-"
-            #     dfNoDupl.at["Sharpe_5Y", i] = "-"
-            
-            #     dfNoDupl.at["V_mensual", i] = "-"
-            #     dfNoDupl.at["V_semestral", i] = "-"
-            #     dfNoDupl.at["V_Ytd", i] = "-"
-            #     dfNoDupl.at["V_1Y", i] = "-"
-            #     dfNoDupl.at["V_3Y", i] = "-"
-            #     dfNoDupl.at["V_5Y", i] = "-"
-
-
-dictVecesNegativo = listasADiccionarios(dfVecesNegativo)
-dictVolatilidad = listasADiccionarios(dfVolatilidades)
-dictRentabilidades =listasADiccionarios(dfRentabilidades)
-
-print(dictVecesNegativo)
-print(dictVolatilidad)
-print(dictRentabilidades)
-
 writer = ExcelWriter('SIF_2023Actualizado.xlsx')
 dfSIF2023.to_excel(writer, 'SIF_2023Actualizado', index=False)
 writer.close()
-

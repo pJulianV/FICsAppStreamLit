@@ -369,5 +369,5 @@ col1, col2, col3 = st.columns(3)
 
 with col2:
     st.download_button(label='Generar Informe',
-                                    data= "SIF_2023Actualizado.xlsx" ,
-                                    file_name= 'SIFInforme.xlsx')
+                       data="SIF_2023Actualizado.xlsx", 
+                       file_name= 'SIFInforme.xlsx')
