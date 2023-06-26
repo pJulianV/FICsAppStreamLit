@@ -358,6 +358,10 @@ empty_left, contents, empty_right = st.columns([0.6, 2, 0.1])
 with contents:
     st.subheader("_Todos Los Fondos Disponibles_")
 
+empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+
+with contents:
+    st.markdown("Espere hasta que el boton se active")
 
 
 
