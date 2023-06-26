@@ -364,10 +364,13 @@ with contents:
 
 col1, col2, col3 = st.columns(3)
 
+dfSIF2023 = pd.read_excel("SIF_2023Actualizado.xlsx",
+                          sheet_name="SIF_2023Actualizado",
+                          header=0)
 
 
 
 with col2:
-    st.download_button(label='Generar Informe',
-                       data="SIF_2023Actualizado.xlsx", 
+    st.download_button(label='Generar Informe SIF',
+                       data=to_excel(dfSIF2023),
                        file_name= 'SIFInforme.xlsx')
