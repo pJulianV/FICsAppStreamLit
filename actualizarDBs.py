@@ -1,6 +1,6 @@
 import pandas as pd
 from pandas import ExcelWriter
-
+from math import sqrt
 
 def to_excel(df):
     output = BytesIO()
@@ -20,7 +20,6 @@ dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
                           sheet_name= "Sheet1",
                           header= 0)
 
-dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 # ! Crear Columnas Nuevas
 
@@ -43,15 +42,15 @@ def agregarColumnas(df):
     df = df.assign(Rentab_Neg_semana	= "" )
     df = df.assign(Rentab_Neg_mes= "" )
     df = df.assign(Rentab_Neg_YtD= "" )
+    df = df.assign(Rentab_Neg_Semestre= "" )
     df = df.assign(Rentab_Neg_1Y= "" )
     df = df.assign(ASSET_CLASS= "" )
     return df
 
 
 dfSIF2023 = agregarColumnas(dfSIF2023)
-dfSIF2023NoDupl = agregarColumnas(dfSIF2023NoDupl)
 
-print(dfSIF2023NoDupl.columns)
+
 
 dfTiposFondos = pd.read_excel("TiposFondos.xlsx",
                            sheet_name= "Hoja1",
@@ -87,7 +86,6 @@ for i in range(rowCount2023):
 
 
 
-
 # ! MODELO.xlsb para sacar las volatilidades y veces negativas
 
 excel_modelo = "MODELO.xlsb"
@@ -108,73 +106,183 @@ dfVecesNegativo = pd.read_excel(excel_modelo,
 
 
 dfRentabilidades = pd.read_excel(excel_modelo,
-                   sheet_name= "VU",
-                   header=13,
+                   sheet_name = "VU",
+                   header = 12,
                    usecols = "B:NB",
-                   nrows= 7
+                   nrows= 6
                    )
 
-
+df_IBR = pd.read_excel(excel_modelo,
+                   sheet_name = "IBR",
+                   header = 5,
+                   usecols = "H",
+                   nrows = 3
+                   )
 # for (columnName, columnData) in dfVolatilidades.iteritems(): es igual a excepto con  
 # ! dfVolatilidades
 
-print(dfSIF2023NoDupl.shape[0])
 
 
-listName = []
-listData = []
 
 
 def listasADiccionarios(df):
+    listName = []
+    listData = []
+
     for (columnName, columnData) in df.items():
-        listName.append(columnName)
+        listName.append(str(columnName))
         listData.append(columnData)
     
+
     diccionario = dict(zip(listName,listData))
     return diccionario
 
-# def asignarValoresColumnas(dfNoDupl):
-        # for i in range(dfNoDupl.shape[0]):
 
-
-dictVecesNegativo = listasADiccionarios(dfVecesNegativo)
 dictVolatilidad = listasADiccionarios(dfVolatilidades)
 dictRentabilidades =listasADiccionarios(dfRentabilidades)
+dictVecesNegativo = listasADiccionarios(dfVecesNegativo)
+dictIBR = listasADiccionarios(df_IBR)
+
+
+
+def revisarDicts(dict):
+    keysList = list(dict.keys())
+    print(keysList)
+    print(len(keysList))
+    print(dict[keysList[0]])
+    print(dict[keysList[1]], "\n")
+
+
+
+revisarDicts(dictVolatilidad)
+revisarDicts(dictRentabilidades)
+revisarDicts(dictVecesNegativo)
+
+uniqueKeyIBR = list(dictIBR.keys())[0]
+valoresIBR = dictIBR[uniqueKeyIBR] 
+
+
+ibr1y = valoresIBR[0]*100 
+ibr3y = valoresIBR[1]*100 
+ibr5y = valoresIBR[2]*100    
+
+#10.6
+#5.1
+#4.7
+
+
+print(
+    ibr1y, "  ",
+    ibr3y, "  ",
+    ibr5y
+)
+
+def procesarDato(dato):
+    if dato == "ND":
+        return dato
+    else:
+        return dato * 100
+
+print("Corriendo Rentabilidades")
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    if nombreFondo in dictVecesNegativo:
+
+        rentabilidad = dictRentabilidades[nombreFondo]
+        dfSIF2023.at[i,"Rentab_1Y"] = procesarDato(rentabilidad[3])
+        dfSIF2023.at[i,"Rentab_3Y"] = procesarDato(rentabilidad[4])
+        dfSIF2023.at[i,"Rentab_5Y"] = procesarDato(rentabilidad[5])
+
+    else:
+
+        dfSIF2023.at[i,"Rentab_1Y"] = "-"
+        dfSIF2023.at[i,"Rentab_3Y"] = "-"
+        dfSIF2023.at[i,"Rentab_5Y"] = "-"
+
+
+
+print("Corriendo Volatilidad")
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    if nombreFondo in dictVolatilidad:
+
+        volatilidad = dictVolatilidad[nombreFondo]
+        dfSIF2023.at[i,"V_mensual"] = procesarDato(volatilidad[0])
+        dfSIF2023.at[i,"V_semestral"] = procesarDato(volatilidad[1])
+        dfSIF2023.at[i,"V_Ytd"] = procesarDato(volatilidad[2])
+        dfSIF2023.at[i,"V_1Y"] = procesarDato(volatilidad[3])
+        dfSIF2023.at[i,"V_3Y"] = procesarDato(volatilidad[4])
+        dfSIF2023.at[i,"V_5Y"] = procesarDato(volatilidad[5])
+
+    else:
+        dfSIF2023.at[i,"V_mensual"] = "-"
+        dfSIF2023.at[i,'V_semestral'] = "-"
+        dfSIF2023.at[i,"V_Ytd"] = "-"
+        dfSIF2023.at[i,"V_1Y"] = "-"
+        dfSIF2023.at[i,"V_3Y"] = "-"
+        dfSIF2023.at[i,"V_5Y"] = "-"
+
+
+
+print("Corriendo Sharpe")
+def calcularSharpe(rentabilidad, ibr, volatilidad):
+    try:
+        sharpe = (rentabilidad*100)-ibr/(volatilidad*100)
+
+    except:
+        sharpe = "ND"
+    return sharpe
 
 
 for i in range(rowCount2023):
 
     nombreFondo = dfSIF2023["concatenar"][i]
-    
-    if nombreFondo in dictVolatilidad:
-    
-        tipoFondo = dictVolatilidad[nombreFondo]
-        dfSIF2023.at[i, 'V_mensual'] = tipoFondo[0]
+    if nombreFondo in dictVolatilidad and nombreFondo in dictRentabilidades:
+
+        rentabilidad = dictRentabilidades[nombreFondo]
+        volatilidad = dictVolatilidad[nombreFondo]
+
+        dfSIF2023.at[i, "Sharpe_1Y"] = calcularSharpe(rentabilidad[3], ibr1y, volatilidad[3])
+        dfSIF2023.at[i, "Sharpe_3Y"] = calcularSharpe(rentabilidad[4], ibr3y,volatilidad[4])
+        dfSIF2023.at[i, "Sharpe_5Y"] = calcularSharpe(rentabilidad[5], ibr5y,volatilidad[5])
     else:
-        dfSIF2023.at[i, 'V_mensual'] = "-"
+        dfSIF2023.at[i, "Sharpe_1Y"] = "-"
+        dfSIF2023.at[i, "Sharpe_3Y"] = "-"
+        dfSIF2023.at[i, "Sharpe_5Y"] = "-"
+    
+
+print("Corriendo Veces Negativo")
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    if nombreFondo in dictRentabilidades:
+
+        vecesNegativo = dictVecesNegativo[nombreFondo]
+        dfSIF2023.at[i, "Rentab_Neg_semana"] = vecesNegativo[0]
+        dfSIF2023.at[i, "Rentab_Neg_mes"] = vecesNegativo[1]
+        dfSIF2023.at[i, "Rentab_Neg_YtD"] = vecesNegativo[2]
+        dfSIF2023.at[i, "Rentab_Neg_Semestre"] = vecesNegativo[3]
+        dfSIF2023.at[i, "Rentab_Neg_1Y"] = vecesNegativo[4]
 
 
-                
-            #     dfNoDupl.at["V_mensual", i] = "Asignacion funciona"
-            #     dfNoDupl.at["V_semestral", i] = "Asignacion funciona"
-            #     dfNoDupl.at["V_Ytd", i] = "Asignacion funciona"
-            #     dfNoDupl.at["V_1Y", i] = "Asignacion funciona"
-            #     dfNoDupl.at["V_3Y", i] = "Asignacion funciona"
-            #     dfNoDupl.at["V_5Y", i] = "Asignacion funciona"
-
-
-            #     Modelo -> IBR Celda H7
-
-            #     dfNoDupl.at["Sharpe_1Y", i] = "(1+[RN. 1Y]])/(1+IBR Celda H7))-1)/RAIZ(Volatilidad. 1Y)
-            #     dfNoDupl.at["Sharpe_3Y", i] = "(1+[RN. 3Y]])/(1+IBR Celda H7))-1)/RAIZ(Volatilidad. 3Y)
-            #     dfNoDupl.at["Sharpe_5Y", i] = "(1+[RN. 5Y]])/(1+IBR Celda H7))-1)/RAIZ(Volatilidad. 5Y)
-
-            #     dfNoDupl.at["Rentab_Neg_semana", i] = "Asignacion funciona"
-            #     dfNoDupl.at["Rentab_Neg_mes", i] = "Asignacion funciona"
-            #     dfNoDupl.at["Rentab_Neg_YtD", i] = "Asignacion funciona"
-            #     dfNoDupl.at["Rentab_Neg_1Y", i] = "Asignacion funciona"       
+    else:
+        dfSIF2023.at[i, "Rentab_Neg_semana"] = "-"
+        dfSIF2023.at[i, "Rentab_Neg_mes"] = "-"
+        dfSIF2023.at[i, "Rentab_Neg_YtD"] = "-"
+        dfSIF2023.at[i, "Rentab_Neg_1Y"] = "-"
 
 
 writer = ExcelWriter('SIF_2023Actualizado.xlsx')
 dfSIF2023.to_excel(writer, 'SIF_2023Actualizado', index=False)
+writer.close()
+
+
+
+dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+print(dfSIF2023NoDupl.shape[0])
+
+writer = ExcelWriter('SIF_2023NoDuplAct.xlsx')
+dfSIF2023NoDupl.to_excel(writer, 'SIF_2023NoDuplAct.xlsx', index=False)
 writer.close()

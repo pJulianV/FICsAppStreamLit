@@ -283,6 +283,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 df_downl =filter_dataframe(df)
 
+
 df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
@@ -353,28 +354,84 @@ st.text(" ")
 st.text(" ")
 
 
+
+# ! SIF 2023!!!
+
+def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
+
+    modifySIF = st.checkbox("Add filters SIF")
+
+    if not modifySIF:
+        return df 
+    
+    df = df.copy()
+    # Try to convert datetimes into a standard format (datetime, no timezone)
+    for col in df.columns:
+        if is_object_dtype(df[col]):
+            try:
+                df[col] = pd.to_datetime(df[col])
+            except Exception:
+                pass
+
+        if is_datetime64_any_dtype(df[col]):
+            df[col] = df[col].dt.tz_localize(None)
+
+    modification_container = st.container()
+
+    dfColumns = ["ASSET_CLASS", "Nombre Negocio"]
+    with modification_container:
+        
+        
+        to_filter_columns = st.multiselect("Filtrar por: ", dfColumns)
+        for column in to_filter_columns:
+        
+            left, right = st.columns((1, 20))
+            left.write("↳")
+
+            user_cat_input = right.multiselect(
+                    f"{column}",
+                    df[column].unique(),
+                    default=(df[column].to_list())[0],
+                    
+                )
+            
+            
+            df = df[df[column].isin(user_cat_input)]
+
+
+    return df
+
+
+
 empty_left, contents, empty_right = st.columns([0.6, 2, 0.1])
 
 with contents:
     st.subheader("_Todos Los Fondos Disponibles_")
 
-empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
 
-with contents:
-    st.markdown("Espere hasta que el boton se active")
+excelSIF2023 = "SIF_2023NoDuplAct.xlsx" # Original: SIF_2023Actualizado.xlsx
+dfSIF2023 = pd.read_excel(excelSIF2023,
+                          sheet_name= "SIF_2023Actualizado",
+                          header= 0)
+
+
+df_downl2023 = filter_dataframeSIF(dfSIF2023)
+
+
+df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+
+
+st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre Negocio', "ASSET_CLASS"]],  hide_index=True )
 
 
 
 
 col1, col2, col3 = st.columns(3)
 
-dfSIF2023 = pd.read_excel("SIF_2023Actualizado.xlsx",
-                          sheet_name="SIF_2023Actualizado",
-                          header=0)
-
 
 
 with col2:
     st.download_button(label='Generar Informe SIF',
-                       data=to_excel(dfSIF2023),
-                       file_name= 'SIFInforme.xlsx')
+                       data=to_excel(df_downl2023) ,
+                       file_name= 'SIFInforme.xlsx'
+                       )
