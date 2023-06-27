@@ -1,7 +1,7 @@
 # ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
 # cd OneDrive - Grupo Bancolombia\Workspace\PruebaStreamLit
-# cd Workspace\FIC StreamLit
+# cd Workspace\FICsAppStreamLit
 
 
 # pip install -r requirements.txt
@@ -409,10 +409,11 @@ with contents:
     st.subheader("_Todos Los Fondos Disponibles_")
 
 
-excelSIF2023 = "SIF_2023NoDuplAct.xlsx" # Original: SIF_2023Actualizado.xlsx
+excelSIF2023 = "SIF_2023NoDuplAct.xlsx"  # Original: SIF_2023Actualizado.xlsx
 dfSIF2023 = pd.read_excel(excelSIF2023,
-                          sheet_name= "SIF_2023Actualizado",
+                          sheet_name="SIF_2023NoDuplAct.xlsx",
                           header= 0)
+
 
 
 df_downl2023 = filter_dataframeSIF(dfSIF2023)
