@@ -150,7 +150,7 @@ def revisarDicts(dict):
     print(keysList)
     print(len(keysList))
     print(dict[keysList[0]])
-    print(dict[keysList[1]], "\n")
+    print(dict[keysList[2]], "\n")
 
 
 
@@ -228,11 +228,14 @@ for i in range(rowCount2023):
 
 print("Corriendo Sharpe")
 def calcularSharpe(rentabilidad, ibr, volatilidad):
+    
     try:
-        sharpe = (rentabilidad*100)-ibr/(volatilidad*100)
+        sharpe = ((rentabilidad*100)-ibr)/(volatilidad*100)
+        sharpe = ((rentabilidad*100)-ibr)/(volatilidad*100)
 
     except:
         sharpe = "ND"
+
     return sharpe
 
 
@@ -250,8 +253,21 @@ for i in range(rowCount2023):
     else:
         dfSIF2023.at[i, "Sharpe_1Y"] = "-"
         dfSIF2023.at[i, "Sharpe_3Y"] = "-"
-        dfSIF2023.at[i, "Sharpe_5Y"] = "-"
+        dfSIF2023.at[i, "Sharpe_5Y"] = "-" 
     
+
+# Ver cuales fondos estan en modelo pero no en SIF
+listaNoEncontrados = []
+
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    if nombreFondo in dictVolatilidad:
+        dictVolatilidad[nombreFondo]
+
+
+print(listaNoEncontrados)
+
 
 print("Corriendo Veces Negativo")
 for i in range(rowCount2023):
@@ -280,7 +296,7 @@ writer.close()
 
 
 
-dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["concatenar"], keep='first')
 print(dfSIF2023NoDupl.shape[0])
 
 writer = ExcelWriter('SIF_2023NoDuplAct.xlsx')

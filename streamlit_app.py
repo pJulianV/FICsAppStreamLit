@@ -1,7 +1,7 @@
 # ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
 # cd OneDrive - Grupo Bancolombia\Workspace\PruebaStreamLit
-# cd Workspace\FICsAppStreamLit
+# cd Workspace\FIC StreamLit
 
 
 # pip install -r requirements.txt
@@ -287,7 +287,11 @@ df_downl =filter_dataframe(df)
 df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio', "ASSET_CLASS"]],  hide_index=True )
+
+
+st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio'
+                             , "ASSET_CLASS"
+                            ]],  hide_index=True )
 
 
 
@@ -409,11 +413,10 @@ with contents:
     st.subheader("_Todos Los Fondos Disponibles_")
 
 
-excelSIF2023 = "SIF_2023NoDuplAct.xlsx"  # Original: SIF_2023Actualizado.xlsx
+excelSIF2023 = "SIF_2023NoDuplAct.xlsx" # Original: SIF_2023Actualizado.xlsx
 dfSIF2023 = pd.read_excel(excelSIF2023,
-                          sheet_name="SIF_2023NoDuplAct.xlsx",
+                          sheet_name= "SIF_2023NoDuplAct.xlsx",
                           header= 0)
-
 
 
 df_downl2023 = filter_dataframeSIF(dfSIF2023)
@@ -422,7 +425,9 @@ df_downl2023 = filter_dataframeSIF(dfSIF2023)
 df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre Negocio', "ASSET_CLASS"]],  hide_index=True )
+st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre Negocio', 
+                                 "ASSET_CLASS"
+                                ]],  hide_index=True )
 
 
 
