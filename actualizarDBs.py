@@ -52,7 +52,7 @@ dfSIF2023 = agregarColumnas(dfSIF2023)
 
 
 
-dfTiposFondos = pd.read_excel("TiposFondos.xlsx",
+dfTiposFondos = pd.read_excel("BD ASSET CLASS.xlsx",
                            sheet_name= "Hoja1",
                            header= 0)
 
@@ -61,11 +61,8 @@ dfTiposFondosNoDupl = dfTiposFondos.drop_duplicates(subset=["Nombre Negocio"], k
 
 
 diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['Nombre Negocio'],
-                                  dfTiposFondosNoDupl['ASSET_CLASS.ASSET CLASS']
+                                  dfTiposFondosNoDupl['ASSET CLASS']
                                   ))
-
-
-
 
 
 rowCount2023 = dfSIF2023.shape[0]
@@ -86,21 +83,21 @@ for i in range(rowCount2023):
 
 
 
-# ! MODELO.xlsb para sacar las volatilidades y veces negativas
+# ! MODELO_TodosLosFondos para sacar las volatilidades y veces negativas
 
-excel_modelo = "MODELO.xlsb"
+excel_modelo = "MODELO_TodosLosFondos.xlsb"
 
 dfVolatilidades = pd.read_excel(excel_modelo,
                    sheet_name= "R_diarias",
                    header=17,
-                   usecols = "C:NC",
+                   usecols = "C:APL",
                    nrows= 6
                    )
 
 dfVecesNegativo = pd.read_excel(excel_modelo,
                    sheet_name= "R_diarias",
                    header=28,
-                   usecols = "C:NC",
+                   usecols = "C:APL",
                    nrows= 5
                    )
 
@@ -108,16 +105,16 @@ dfVecesNegativo = pd.read_excel(excel_modelo,
 dfRentabilidades = pd.read_excel(excel_modelo,
                    sheet_name = "VU",
                    header = 12,
-                   usecols = "B:NB",
+                   usecols = "B:APK",
                    nrows= 6
                    )
-
 df_IBR = pd.read_excel(excel_modelo,
                    sheet_name = "IBR",
                    header = 5,
                    usecols = "H",
                    nrows = 3
                    )
+
 # for (columnName, columnData) in dfVolatilidades.iteritems(): es igual a excepto con  
 # ! dfVolatilidades
 
@@ -187,7 +184,7 @@ print("Corriendo Rentabilidades")
 for i in range(rowCount2023):
 
     nombreFondo = dfSIF2023["concatenar"][i]
-    if nombreFondo in dictVecesNegativo:
+    if nombreFondo in dictRentabilidades:
 
         rentabilidad = dictRentabilidades[nombreFondo]
         dfSIF2023.at[i,"Rentab_1Y"] = procesarDato(rentabilidad[3])
@@ -273,7 +270,7 @@ print("Corriendo Veces Negativo")
 for i in range(rowCount2023):
 
     nombreFondo = dfSIF2023["concatenar"][i]
-    if nombreFondo in dictRentabilidades:
+    if nombreFondo in dictVecesNegativo:
 
         vecesNegativo = dictVecesNegativo[nombreFondo]
         dfSIF2023.at[i, "Rentab_Neg_semana"] = vecesNegativo[0]
@@ -295,10 +292,10 @@ dfSIF2023.to_excel(writer, 'SIF_2023Actualizado', index=False)
 writer.close()
 
 
-
 dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["concatenar"], keep='first')
 print(dfSIF2023NoDupl.shape[0])
 
+
 writer = ExcelWriter('SIF_2023NoDuplAct.xlsx')
-dfSIF2023NoDupl.to_excel(writer, 'SIF_2023NoDuplAct.xlsx', index=False)
+dfSIF2023NoDupl.to_excel(writer, 'SIF_2023NoDuplAct', index=False)
 writer.close()

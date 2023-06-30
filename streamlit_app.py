@@ -7,8 +7,8 @@
 # pip install -r requirements.txt
 
 # pip install ______ -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
-# pip install -r requirements.txt -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
 
+# pip install -r requirements.txt -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
 
 
 
@@ -95,17 +95,18 @@ img = Image.open("img/investment3.jpeg")
 st.image(img, use_column_width=True)
 
 
-excel_file = "InformeFICsAbril2023.xlsx"
-sheet_name = "Hoja1"
+excel_file = "MODELO.xlsb"
+sheet_name = "BD"
 
 df = pd.read_excel(excel_file,
                    sheet_name= sheet_name,
-                   header=0
+                   header=0,
+                   usecols = "A:AF",
                    )
 
 dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
-dfTiposFondos = pd.read_excel("TiposFondos.xlsx",
+dfTiposFondos = pd.read_excel("BD ASSET CLASS.xlsx",
                            sheet_name= "Hoja1",
                            header= 0)
 
@@ -121,11 +122,11 @@ nombreFondos70 = df["Nombre Negocio"].unique().tolist()
 nombresDBTiposFondos = dfTiposFondos["Nombre Negocio"].unique().tolist()
 
 
-listaTiposFondos = dfTiposFondos["ASSET_CLASS.ASSET CLASS"].unique().tolist()
+listaTiposFondos = dfTiposFondos["ASSET CLASS"].unique().tolist()
 
 
 diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['Nombre Negocio'],
-                                  dfTiposFondosNoDupl['ASSET_CLASS.ASSET CLASS']
+                                  dfTiposFondosNoDupl['ASSET CLASS']
                                   ))
 
 
@@ -166,13 +167,32 @@ with contents:
 
 st.text(" ")
 
+# ! Descargar por Excel
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    workbook = writer.book
+    worksheet = writer.sheets['Sheet1']
+    format1 = workbook.add_format({'num_format': '0.00'}) 
+    worksheet.set_column('A:A', None, format1)  
+    writer.close()
+    processed_data = output.getvalue()
+    return processed_data
+
+
+
 
 col1, col2, col3 = st.columns([1.2, 2, 0.1])
 
 
 with col2:
-    with open(excel_file, 'rb') as my_file:
-        st.download_button(label = 'Descargar Sugeridos', data = my_file, file_name = 'FondosSugeridos.xlsx', mime = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    # with open(excel_file, 'rb') as my_file:
+    st.download_button(label='Generar Informe SIF',
+                       data=to_excel(df) ,
+                       file_name= 'FondosSugeridos.xlsx'
+                       )
+
     
 st.text(" ")
 st.text(" ")
@@ -305,18 +325,6 @@ csv = convert_df(df_downl)
 st.text(" ")
 
 
-# ! Descargar por Excel
-def to_excel(df):
-    output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, index=False, sheet_name='Sheet1')
-    workbook = writer.book
-    worksheet = writer.sheets['Sheet1']
-    format1 = workbook.add_format({'num_format': '0.00'}) 
-    worksheet.set_column('A:A', None, format1)  
-    writer.close()
-    processed_data = output.getvalue()
-    return processed_data
 
 
 
@@ -413,9 +421,15 @@ with contents:
     st.subheader("_Todos Los Fondos Disponibles_")
 
 
-excelSIF2023 = "SIF_2023NoDuplAct.xlsx" # Original: SIF_2023Actualizado.xlsx
+sheetSIF2023 = "SIF_2023Actualizado"
+excelSIF2023 = sheetSIF2023 + ".xlsx" 
+
+#   Original:                       "SIF_2023Actualizado"
+#   Sin "Concatenar Duplicado":     "SIF_2023NoDuplAct"
+
+
 dfSIF2023 = pd.read_excel(excelSIF2023,
-                          sheet_name= "SIF_2023NoDuplAct.xlsx",
+                          sheet_name= sheetSIF2023,
                           header= 0)
 
 
@@ -435,8 +449,8 @@ st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre Negocio',
 col1, col2, col3 = st.columns(3)
 
 
-
 with col2:
+
     st.download_button(label='Generar Informe SIF',
                        data=to_excel(df_downl2023) ,
                        file_name= 'SIFInforme.xlsx'
