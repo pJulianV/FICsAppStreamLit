@@ -455,3 +455,15 @@ with col2:
                        data=to_excel(df_downl2023) ,
                        file_name= 'SIFInforme.xlsx'
                        )
+
+
+@st.cache_data(ttl=600)
+def load_data(sheets_url):
+    csv_url = sheets_url.replace("/edit#gid=", "/export?format=csv&gid=")
+    return pd.read_csv(csv_url)
+
+
+df = load_data(st.secrets["public_gsheets_url"])
+
+# Print results.
+st.dataframe(df)
