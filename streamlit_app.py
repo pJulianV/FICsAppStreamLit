@@ -457,17 +457,23 @@ with col2:
                        )
 
 
-@st.cache_data(ttl=600)
+@st.cache_data(ttl=3600)
+# def load_data(sheets_url):
+#     csv_url = sheets_url.replace("/edit#gid=", "/export?format=csv&gid=")
+#     return pd.read_csv(csv_url)
+
+
+# df = load_data(st.secrets["public_gsheets_url"])
+
+# for row in df.itertuples():
+#     st.write(f"{row.name} has a :{row.pet}:")
+
 def load_data(sheets_url):
     csv_url = sheets_url.replace("/edit#gid=", "/export?format=csv&gid=")
     return pd.read_csv(csv_url)
 
 
-df = load_data(st.secrets["public_gsheets_url"])
+df = load_data(
+    "https://docs.google.com/spreadsheets/d/1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw/edit#gid=1816189210")
 
-# Print results.
-a = st.secrets["public_gsheets_url"]
-st.text(a)
 df
-for row in df.itertuples():
-    st.write(f"{row.name} has a :{row.pet}:")
