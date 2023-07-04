@@ -457,7 +457,6 @@ with col2:
                        )
 
 
-@st.cache_data(ttl=3600)
 # def load_data(sheets_url):
 #     csv_url = sheets_url.replace("/edit#gid=", "/export?format=csv&gid=")
 #     return pd.read_csv(csv_url)
@@ -468,12 +467,17 @@ with col2:
 # for row in df.itertuples():
 #     st.write(f"{row.name} has a :{row.pet}:")
 
-def load_data(sheets_url):
-    csv_url = sheets_url.replace("/edit#gid=", "/export?format=csv&gid=")
-    return pd.read_csv(csv_url)
+@st.cache_data(ttl=3600)
+def load_data(url):
+    return  pd.read_csv(url, dtype=str).fillna("")
 
 
-df = load_data(
-    "https://docs.google.com/spreadsheets/d/1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw/edit#gid=1816189210")
 
-df
+# Connect to the Google Sheet
+sheet_id = "1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw"
+sheet_name = "sif2023"
+url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
+df = load_data(url)
+
+# Show the dataframe (we'll delete this later)
+st.write(df)
