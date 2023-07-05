@@ -1,6 +1,6 @@
 # ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
-# cd OneDrive - Grupo Bancolombia\Workspace\PruebaStreamLit
+# cd OneDrive - Grupo Bancolombia\Workspace\FicsAppStreamLit
 # cd Workspace\FIC StreamLit
 
 
@@ -86,7 +86,7 @@ customized_button = st.markdown("""
 empty_left, contents, empty_right = st.columns([0.55, 3, 0.1])
 
 with contents:
-    st.header("Explora Fondos a tu Medida 📈")
+    st.header("Reporte de competencia industria local de fondos")
     
 st.text(" ")
 
@@ -109,6 +109,47 @@ dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 dfTiposFondos = pd.read_excel("BD ASSET CLASS.xlsx",
                            sheet_name= "Hoja1",
                            header= 0)
+
+dfIndustriaLocal = pd.read_excel( "BDIndustriaLocalFICs.xlsx",
+                   sheet_name= "BD 30Abr2023",
+                   header=1,
+                   usecols = "A:Z",
+                   )
+
+dictNombresCortos = dict(zip(dfIndustriaLocal['concatenar'],
+                                  dfIndustriaLocal['Nombre Corto']
+                                  ))
+
+dictComisionAdmin = dict(zip(dfIndustriaLocal['concatenar'],
+                                  dfIndustriaLocal['Comisión admin(%)']
+                                  )) 
+
+rowCount = df.shape[0]
+
+df = df.assign(Nombre_Corto= "" )
+
+print("Corriendo Nombre Corto")
+for i in range(rowCount):
+
+    nombreFondo = df["Llave"][i]
+    if nombreFondo in dictNombresCortos:
+        nombreCorto = dictNombresCortos[nombreFondo]
+        df.at[i, "Nombre_Corto"] = nombreCorto
+    else:
+        df.at[i, "Nombre_Corto"] = "-"
+
+
+
+print("Corriendo Comision")
+for i in range(rowCount):
+
+    nombreFondo = df["Llave"][i]
+    if nombreFondo in dictComisionAdmin:
+        comisionAdmin = dictComisionAdmin[nombreFondo]
+        df.at[i, "Comision_Admin"] = comisionAdmin
+    else:
+        df.at[i, "Comision_Admin"] = "-"
+
 
 dfTiposFondosNoDupl = dfTiposFondos.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
@@ -168,6 +209,7 @@ with contents:
 st.text(" ")
 
 # ! Descargar por Excel
+@st.cache_data
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -213,12 +255,12 @@ with contents:
 empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
 
 with contents:
-    st.markdown("O escriba para buscar coincidencias")
+    st.markdown("(Base de fondos sugeridos)")
 
 
 
 
-
+@st.cache_data(experimental_allow_widgets=True)
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     modify = st.checkbox("Add filters")
@@ -309,7 +351,7 @@ df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre Negocio"], keep='first
 
 
 
-st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre Negocio'
+st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre_Corto'
                              , "ASSET_CLASS"
                             ]],  hide_index=True )
 
@@ -368,7 +410,7 @@ st.text(" ")
 
 
 # ! SIF 2023!!!
-
+@st.cache_data(experimental_allow_widgets=True)
 def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
     modifySIF = st.checkbox("Add filters SIF")
@@ -390,12 +432,12 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
     modification_container = st.container()
 
-    dfColumns = ["ASSET_CLASS", "Nombre Negocio"]
+    dfColumns2023 = ["ASSET_CLASS", "Nombre Negocio"]
     with modification_container:
         
         
-        to_filter_columns = st.multiselect("Filtrar por: ", dfColumns)
-        for column in to_filter_columns:
+        to_filter_columns2023 = st.multiselect("Filtra por: ", dfColumns2023,key="SIF")
+        for column in to_filter_columns2023:
         
             left, right = st.columns((1, 20))
             left.write("↳")
@@ -418,7 +460,12 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 empty_left, contents, empty_right = st.columns([0.6, 2, 0.1])
 
 with contents:
-    st.subheader("_Todos Los Fondos Disponibles_")
+    st.subheader("_Base total industria local de fondos_")
+
+empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+
+with contents:
+    st.markdown("(Fuente: Reporte 523 Superfinanciera)")
 
 
 sheetSIF2023 = "SIF_2023Actualizado"
@@ -427,10 +474,16 @@ excelSIF2023 = sheetSIF2023 + ".xlsx"
 #   Original:                       "SIF_2023Actualizado"
 #   Sin "Concatenar Duplicado":     "SIF_2023NoDuplAct"
 
+@st.cache_data
+def load_data(excel,sheet):
+    # Carga tu DataFrame aquí
+    df = pd.read_excel(excel,
+                sheet_name= sheet,
+                  header= 0)
+    return df
+ 
+dfSIF2023 = load_data(excelSIF2023,sheetSIF2023)
 
-dfSIF2023 = pd.read_excel(excelSIF2023,
-                          sheet_name= sheetSIF2023,
-                          header= 0)
 
 
 df_downl2023 = filter_dataframeSIF(dfSIF2023)
@@ -439,7 +492,7 @@ df_downl2023 = filter_dataframeSIF(dfSIF2023)
 df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre Negocio', 
+st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre_Corto', 
                                  "ASSET_CLASS"
                                 ]],  hide_index=True )
 
@@ -467,17 +520,17 @@ with col2:
 # for row in df.itertuples():
 #     st.write(f"{row.name} has a :{row.pet}:")
 
-@st.cache_data(ttl=3600)
-def load_data(url):
-    return  pd.read_csv(url, dtype=str).fillna("")
+# @st.cache_data(ttl=3600)
+# def load_data(url):
+#     return  pd.read_csv(url, dtype=str).fillna("")
 
 
 
-# Connect to the Google Sheet
-sheet_id = "1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw"
-sheet_name = "1816189210"
-url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
-df = load_data(url)
+# # Connect to the Google Sheet
+# sheet_id = "1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw"
+# sheet_name = "1816189210"
+# url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
+# df = load_data(url)
 
 # Show the dataframe (we'll delete this later)
-st.write(df)
+# st.write(df)

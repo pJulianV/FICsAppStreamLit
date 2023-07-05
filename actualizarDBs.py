@@ -45,6 +45,8 @@ def agregarColumnas(df):
     df = df.assign(Rentab_Neg_Semestre= "" )
     df = df.assign(Rentab_Neg_1Y= "" )
     df = df.assign(ASSET_CLASS= "" )
+    df = df.assign(Comision_Admin= "" )
+    df = df.assign(Nombre_Corto= "" )
     return df
 
 
@@ -115,11 +117,19 @@ df_IBR = pd.read_excel(excel_modelo,
                    nrows = 3
                    )
 
+# De Aqui saco el Nombre Corto y la Comision
+dfIndustriaLocal = pd.read_excel( "BDIndustriaLocalFICs.xlsx",
+                   sheet_name= "BD 30Abr2023",
+                   header=1,
+                   usecols = "A:Z",
+                   )
+
+
 # for (columnName, columnData) in dfVolatilidades.iteritems(): es igual a excepto con  
 # ! dfVolatilidades
 
 
-
+print(list(dfIndustriaLocal.columns))
 
 
 def listasADiccionarios(df):
@@ -139,6 +149,15 @@ dictVolatilidad = listasADiccionarios(dfVolatilidades)
 dictRentabilidades =listasADiccionarios(dfRentabilidades)
 dictVecesNegativo = listasADiccionarios(dfVecesNegativo)
 dictIBR = listasADiccionarios(df_IBR)
+
+
+dictNombresCortos = dict(zip(dfIndustriaLocal['concatenar'],
+                                  dfIndustriaLocal['Nombre Corto']
+                                  ))
+
+dictComisionAdmin = dict(zip(dfIndustriaLocal['concatenar'],
+                                  dfIndustriaLocal['Comisión admin(%)']
+                                  )) 
 
 
 
@@ -285,6 +304,35 @@ for i in range(rowCount2023):
         dfSIF2023.at[i, "Rentab_Neg_mes"] = "-"
         dfSIF2023.at[i, "Rentab_Neg_YtD"] = "-"
         dfSIF2023.at[i, "Rentab_Neg_1Y"] = "-"
+
+
+
+
+
+print("Corriendo Nombre Corto")
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    if nombreFondo in dictNombresCortos:
+        nombreCorto = dictNombresCortos[nombreFondo]
+        dfSIF2023.at[i, "Nombre_Corto"] = nombreCorto
+    else:
+        nombreNegocio = dfSIF2023["Nombre Negocio"][i]
+        dfSIF2023.at[i, "Nombre_Corto"] = nombreNegocio
+
+
+
+print("Corriendo Comision")
+for i in range(rowCount2023):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    if nombreFondo in dictComisionAdmin:
+        comisionAdmin = dictComisionAdmin[nombreFondo]
+        dfSIF2023.at[i, "Comision_Admin"] = comisionAdmin
+    else:
+        dfSIF2023.at[i, "Comision_Admin"] = "-"
+
+
 
 
 writer = ExcelWriter('SIF_2023Actualizado.xlsx')
