@@ -209,7 +209,7 @@ with contents:
 st.text(" ")
 
 # ! Descargar por Excel
-@st.cache_data
+@st.cache_data(ttl=3600)
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -260,7 +260,7 @@ with contents:
 
 
 
-@st.cache_data(experimental_allow_widgets=True)
+# @st.cache_data(experimental_allow_widgets=True )
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     modify = st.checkbox("Add filters")
@@ -410,7 +410,7 @@ st.text(" ")
 
 
 # ! SIF 2023!!!
-@st.cache_data(experimental_allow_widgets=True)
+# @st.cache_data(experimental_allow_widgets=True)
 def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
     modifySIF = st.checkbox("Add filters SIF")
@@ -474,7 +474,7 @@ excelSIF2023 = sheetSIF2023 + ".xlsx"
 #   Original:                       "SIF_2023Actualizado"
 #   Sin "Concatenar Duplicado":     "SIF_2023NoDuplAct"
 
-@st.cache_data
+@st.cache_data(ttl=3600)
 def load_data(excel,sheet):
     # Carga tu DataFrame aquí
     df = pd.read_excel(excel,
