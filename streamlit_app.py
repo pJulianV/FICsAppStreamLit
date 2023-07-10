@@ -2,7 +2,7 @@
 
 # cd OneDrive - Grupo Bancolombia\Workspace\FicsAppStreamLit
 # cd Workspace\FIC StreamLit
-
+# streamlit run streamlit_app.py
 
 # pip install -r requirements.txt
 
@@ -12,20 +12,18 @@
 
 
 
-# streamlit run streamlit_app.py
-
 # ! Los Dataframe con terminacion "NoDupl" es para la visualizacion NO USAR en el excel final
 
 
 import pandas as pd
+import streamlit as st
+# import plotly.express as px
+
 from io import BytesIO
+from xlsxwriter import Workbook
+from PIL import Image
 # from pyxlsb import open_workbook as open_xlsb
 
-from xlsxwriter import Workbook
-import streamlit as st
-
-# import plotly.express as px
-from PIL import Image
 
 
 from pandas.api.types import (
@@ -209,7 +207,7 @@ with contents:
 st.text(" ")
 
 # ! Descargar por Excel
-@st.cache_data
+@st.cache_data(ttl=3600)
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -260,7 +258,7 @@ with contents:
 
 
 
-@st.cache_data(experimental_allow_widgets=True)
+# @st.cache_data(experimental_allow_widgets=True, ttl=3600)
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     modify = st.checkbox("Add filters")
@@ -379,26 +377,6 @@ with col2:
 
 
 
-# Descarcar en Excel
-
-# def to_excel(df):
-#     output = BytesIO()
-#     writer = pd.ExcelWriter(output, engine='xlsxwriter')
-#     df.to_excel(writer, index=False, sheet_name='Sheet1')
-#     workbook = writer.book
-#     worksheet = writer.sheets['Sheet1']
-#     format1 = workbook.add_format({'num_format': '0.00'}) 
-#     worksheet.set_column('A:A', None, format1)  
-#     writer.save()
-#     processed_data = output.getvalue()
-#     return processed_data
-# df_xlsx = to_excel(df)
-
-# st.download_button(label='📥 Download Current Result',
-#                                 data=df_xlsx ,
-#                                 file_name= 'df_test.xlsx')
-
-
 
 st.text(" ")
 st.text(" ")
@@ -410,7 +388,7 @@ st.text(" ")
 
 
 # ! SIF 2023!!!
-@st.cache_data(experimental_allow_widgets=True)
+# @st.cache_data(experimental_allow_widgets=True, ttl=3600)
 def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
     modifySIF = st.checkbox("Add filters SIF")
@@ -474,7 +452,7 @@ excelSIF2023 = sheetSIF2023 + ".xlsx"
 #   Original:                       "SIF_2023Actualizado"
 #   Sin "Concatenar Duplicado":     "SIF_2023NoDuplAct"
 
-@st.cache_data
+@st.cache_data(ttl=3600)
 def load_data(excel,sheet):
     # Carga tu DataFrame aquí
     df = pd.read_excel(excel,
@@ -509,28 +487,3 @@ with col2:
                        file_name= 'SIFInforme.xlsx'
                        )
 
-
-# def load_data(sheets_url):
-#     csv_url = sheets_url.replace("/edit#gid=", "/export?format=csv&gid=")
-#     return pd.read_csv(csv_url)
-
-
-# df = load_data(st.secrets["public_gsheets_url"])
-
-# for row in df.itertuples():
-#     st.write(f"{row.name} has a :{row.pet}:")
-
-# @st.cache_data(ttl=3600)
-# def load_data(url):
-#     return  pd.read_csv(url, dtype=str).fillna("")
-
-
-
-# # Connect to the Google Sheet
-# sheet_id = "1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw"
-# sheet_name = "1816189210"
-# url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
-# df = load_data(url)
-
-# Show the dataframe (we'll delete this later)
-# st.write(df)
