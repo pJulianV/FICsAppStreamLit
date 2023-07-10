@@ -258,7 +258,7 @@ with contents:
 
 
 
-# @st.cache_data(experimental_allow_widgets=True, ttl=3600)
+
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     modify = st.checkbox("Add filters")
@@ -388,7 +388,7 @@ st.text(" ")
 
 
 # ! SIF 2023!!!
-# @st.cache_data(experimental_allow_widgets=True, ttl=3600)
+
 def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
     modifySIF = st.checkbox("Add filters SIF")
@@ -470,7 +470,7 @@ df_downl2023 = filter_dataframeSIF(dfSIF2023)
 df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre_Corto', 
+st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre Negocio', 
                                  "ASSET_CLASS"
                                 ]],  hide_index=True )
 
@@ -487,3 +487,28 @@ with col2:
                        file_name= 'SIFInforme.xlsx'
                        )
 
+
+# def load_data(sheets_url):
+#     csv_url = sheets_url.replace("/edit#gid=", "/export?format=csv&gid=")
+#     return pd.read_csv(csv_url)
+
+
+# df = load_data(st.secrets["public_gsheets_url"])
+
+# for row in df.itertuples():
+#     st.write(f"{row.name} has a :{row.pet}:")
+
+@st.cache_data(ttl=3600)
+def load_data(url):
+    return  pd.read_csv(url, dtype=str).fillna("")
+
+
+
+# Connect to the Google Sheet
+sheet_id = "1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw"
+sheet_name = "1816189210"
+url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
+df = load_data(url)
+
+# Show the dataframe (we'll delete this later)
+st.write(df)
