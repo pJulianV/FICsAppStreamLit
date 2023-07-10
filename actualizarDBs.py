@@ -2,6 +2,8 @@ import pandas as pd
 from pandas import ExcelWriter
 from math import sqrt
 
+fechaCorte = "05 31 2023  0:00:00"
+
 def to_excel(df):
     output = BytesIO()
     from io import BytesIO
@@ -23,11 +25,12 @@ dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
 
 # ! Crear Columnas Nuevas
 
-dfSIF2023 = dfSIF2023.rename(columns={'Rentab. año':'RN.Ytd'})
+dfSIF2023 = dfSIF2023.rename(columns={'Rentab. año':'Rentab. Ultaño'})
 
+dfSIF2023 = dfSIF2023[dfSIF2023["Fecha corte"] == fechaCorte]
 
 def agregarColumnas(df):
-    df = df.assign(Rentab_1Y= "" )
+    df = df.assign(Rentab_Ytd= "" )
     df = df.assign(Rentab_3Y= "" )
     df = df.assign(Rentab_5Y= "" )
     df = df.assign(V_mensual= "" )
