@@ -2,7 +2,7 @@ import pandas as pd
 from pandas import ExcelWriter
 from math import sqrt
 
-fechaCorte = "06 30 2023  0:00:00"
+fechaCorte = "05 30 2023  0:00:00"
 
 def to_excel(df):
     output = BytesIO()

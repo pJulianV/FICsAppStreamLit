@@ -89,7 +89,7 @@ with contents:
 empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
 
 with contents:
-    st.markdown("Fecha Corte: 06 31 2023")
+    st.markdown("Fecha Corte: 05 31 2023")
 
 
 st.text(" ")
