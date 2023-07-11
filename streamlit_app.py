@@ -263,7 +263,7 @@ with contents:
     st.markdown("(Base de fondos sugeridos)")
 
 
-empty_left, contents, empty_right = st.columns([1.3, 3, 1.1])
+empty_left, contents, empty_right = st.columns([2, 2, 2])
 st.text(" ")
 
 with empty_left:
@@ -272,12 +272,12 @@ with empty_left:
     st.markdown("PP - PACTO DE PERMANENCIA")
 
 with contents:
-    st.markdown(" ")
+    st.text(" ")
     st.markdown("RF - RENTA FIJA")
     st.markdown("LP - LARGO PLAZO")
 
 with empty_right:
-    st.markdown(" ")
+    st.text(" ")
     st.markdown("TS - TASA FIJA")
     st.markdown("COL - COLOMBIA")
 
