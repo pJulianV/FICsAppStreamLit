@@ -269,6 +269,9 @@ with empty_right:
     st.markdown("COL - COLOMBIA")
 
 st.text(" ")
+st.text(" ")
+st.text(" ")
+st.text(" ")
 
 
 empty_left, contents, empty_right = st.columns([0.45, 3, 0.1])
