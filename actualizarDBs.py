@@ -314,17 +314,6 @@ for i in range(dfSIF2023.shape[0]):
 
 
 
-print("Corriendo Nombre Corto")
-for i in range(dfSIF2023.shape[0]):
-
-    nombreFondo = dfSIF2023["concatenar"][i]
-    if nombreFondo in dictNombresCortos:
-        nombreCorto = dictNombresCortos[nombreFondo]
-        dfSIF2023.at[i, "Nombre_Corto"] = nombreCorto
-    else:
-        nombreNegocio = dfSIF2023["Nombre Negocio"][i]
-        dfSIF2023.at[i, "Nombre_Corto"] = nombreNegocio
-
 
 print("Corriendo Nombre Corto")
 for i in range(dfSIF2023.shape[0]):
