@@ -272,12 +272,12 @@ with empty_left:
     st.markdown("PP - PACTO DE PERMANENCIA")
 
 with contents:
-    st.text(" ")
+    st.markdown("ㅤ")
     st.markdown("RF - RENTA FIJA")
     st.markdown("LP - LARGO PLAZO")
 
 with empty_right:
-    st.text(" ")
+    st.markdown("ㅤ")
     st.markdown("TS - TASA FIJA")
     st.markdown("COL - COLOMBIA")
 
