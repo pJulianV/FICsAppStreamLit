@@ -250,19 +250,6 @@ st.text(" ")
 st.text(" ")
 
 
-
-
-empty_left, contents, empty_right = st.columns([0.45, 3, 0.1])
-
-with contents:
-    st.subheader("Filtre y Seleccione los que usted desee 🔍")
-    
-empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
-
-with contents:
-    st.markdown("(Base de fondos sugeridos)")
-
-
 empty_left, contents, empty_right = st.columns([2, 2, 2])
 st.text(" ")
 
@@ -282,6 +269,19 @@ with empty_right:
     st.markdown("COL - COLOMBIA")
 
 st.text(" ")
+
+
+empty_left, contents, empty_right = st.columns([0.45, 3, 0.1])
+
+with contents:
+    st.subheader("Filtre y Seleccione los que usted desee 🔍")
+    
+empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+
+with contents:
+    st.markdown("(Base de fondos sugeridos)")
+
+
 st.text(" ")
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
