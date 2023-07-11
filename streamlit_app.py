@@ -264,7 +264,7 @@ with contents:
 
 
 empty_left, contents, empty_right = st.columns([1.3, 3, 1.1])
-
+st.text(" ")
 
 with empty_left:
     st.markdown("ABREVIATURAS: ")
@@ -272,14 +272,17 @@ with empty_left:
     st.markdown("PP - PACTO DE PERMANENCIA")
 
 with contents:
+    st.markdown(" ")
     st.markdown("RF - RENTA FIJA")
     st.markdown("LP - LARGO PLAZO")
 
 with empty_right:
+    st.markdown(" ")
     st.markdown("TS - TASA FIJA")
     st.markdown("COL - COLOMBIA")
 
-
+st.text(" ")
+st.text(" ")
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     modify = st.checkbox("Add filters")
