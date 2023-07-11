@@ -262,12 +262,9 @@ with contents:
     st.markdown("(Base de fondos sugeridos)")
 
 
-
-
-
 empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
 
-    
+
 with empty_left:
     st.markdown("ABREVIATURAS: ")
     st.markdown("SN - SENTENCIAS NACION")
@@ -280,6 +277,7 @@ with contents:
 with empty_right:
     st.markdown("TS - TASA FIJA")
     st.markdown("COL - COLOMBIA")
+
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
