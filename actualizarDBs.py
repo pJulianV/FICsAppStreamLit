@@ -2,7 +2,7 @@ import pandas as pd
 from pandas import ExcelWriter
 from math import sqrt
 
-fechaCorte = "05 31 2023  0:00:00"
+fechaCorte = "06 30 2023  0:00:00"
 
 def to_excel(df):
     output = BytesIO()
@@ -28,7 +28,6 @@ dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
 dfSIF2023 = dfSIF2023.rename(columns={'Rentab. año':'Rentab. Ultaño'})
 
 dfSIF2023 = dfSIF2023[dfSIF2023["Fecha corte"] == fechaCorte]
-
 def agregarColumnas(df):
     df = df.assign(Rentab_Ytd= "" )
     df = df.assign(Rentab_3Y= "" )
@@ -70,10 +69,10 @@ diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['Nombre Negocio'],
                                   ))
 
 
-rowCount2023 = dfSIF2023.shape[0]
+dfSIF2023.reset_index(drop=True, inplace=True)
 
 
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["Nombre Negocio"][i]
     
@@ -86,7 +85,8 @@ for i in range(rowCount2023):
 
 
 
-
+dfSIF2023 = dfSIF2023[dfSIF2023["ASSET_CLASS"] != "CAPITAL PRIVADO"]
+dfSIF2023.reset_index(drop=True, inplace=True)
 
 # ! MODELO_TodosLosFondos para sacar las volatilidades y veces negativas
 
@@ -203,26 +203,26 @@ def procesarDato(dato):
         return dato * 100
 
 print("Corriendo Rentabilidades")
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["concatenar"][i]
     if nombreFondo in dictRentabilidades:
 
         rentabilidad = dictRentabilidades[nombreFondo]
-        dfSIF2023.at[i,"Rentab_1Y"] = procesarDato(rentabilidad[3])
+        dfSIF2023.at[i,"Rentab_Ytd"] = procesarDato(rentabilidad[2])
         dfSIF2023.at[i,"Rentab_3Y"] = procesarDato(rentabilidad[4])
         dfSIF2023.at[i,"Rentab_5Y"] = procesarDato(rentabilidad[5])
 
     else:
 
-        dfSIF2023.at[i,"Rentab_1Y"] = "-"
+        dfSIF2023.at[i,"Rentab_Ytd"] = "-"
         dfSIF2023.at[i,"Rentab_3Y"] = "-"
         dfSIF2023.at[i,"Rentab_5Y"] = "-"
 
 
 
 print("Corriendo Volatilidad")
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["concatenar"][i]
     if nombreFondo in dictVolatilidad:
@@ -258,7 +258,7 @@ def calcularSharpe(rentabilidad, ibr, volatilidad):
     return sharpe
 
 
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["concatenar"][i]
     if nombreFondo in dictVolatilidad and nombreFondo in dictRentabilidades:
@@ -278,7 +278,7 @@ for i in range(rowCount2023):
 # Ver cuales fondos estan en modelo pero no en SIF
 listaNoEncontrados = []
 
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["concatenar"][i]
     if nombreFondo in dictVolatilidad:
@@ -289,7 +289,7 @@ print(listaNoEncontrados)
 
 
 print("Corriendo Veces Negativo")
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["concatenar"][i]
     if nombreFondo in dictVecesNegativo:
@@ -313,7 +313,7 @@ for i in range(rowCount2023):
 
 
 print("Corriendo Nombre Corto")
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["concatenar"][i]
     if nombreFondo in dictNombresCortos:
@@ -326,7 +326,7 @@ for i in range(rowCount2023):
 
 
 print("Corriendo Comision")
-for i in range(rowCount2023):
+for i in range(dfSIF2023.shape[0]):
 
     nombreFondo = dfSIF2023["concatenar"][i]
     if nombreFondo in dictComisionAdmin:

@@ -85,7 +85,13 @@ empty_left, contents, empty_right = st.columns([0.55, 3, 0.1])
 
 with contents:
     st.header("Reporte de competencia industria local de fondos")
-    
+
+empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+
+with contents:
+    st.markdown("Fecha Corte: 06 31 2023")
+
+
 st.text(" ")
 
 
@@ -347,11 +353,22 @@ df_downl =filter_dataframe(df)
 df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
+empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+
+with contents:
+    st.markdown("ABREVIATURAS: ")
+    st.markdown("SN - SENTENCIAS NACION")
+    st.markdown("PP - PACTO DE PERMANENCIA")
+    st.markdown("RF - RENTA FIJA")
+    st.markdown("LP - LARGO PLAZO")
+    st.markdown("TS - TASA FIJA")
+    st.markdown("COL - COLOMBIA")
 
 
 st.dataframe(df_downlNoDupl[['Nombre Entidad','Nombre_Corto'
                              , "ASSET_CLASS"
                             ]],  hide_index=True )
+
 
 
 
@@ -509,6 +526,7 @@ sheet_id = "1tfWAudn1Hkd3TizWbeif7ZdJHEQYH8UpWQv18q7gJxw"
 sheet_name = "1816189210"
 url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
 df = load_data(url)
+
 
 # Show the dataframe (we'll delete this later)
 st.write(df)
