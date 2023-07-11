@@ -84,9 +84,16 @@ customized_button = st.markdown("""
 empty_left, contents, empty_right = st.columns([0.55, 3, 0.1])
 
 with contents:
-    st.header("Reporte de competencia industria local de fondos")
+    st.header("Reporte de competencia industria")
 
 empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+
+
+with contents:
+    st.header("local de fondos")
+
+
+empty_left, contents, empty_right = st.columns([1.75, 3, 0.1])
 
 with contents:
     st.markdown("Fecha Corte: 05 31 2023")
