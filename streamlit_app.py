@@ -262,7 +262,7 @@ with contents:
     st.markdown("(Base de fondos sugeridos)")
 
 
-empty_left, contents, empty_right = st.columns([1.3, 3, 0.1])
+empty_left, contents, empty_right = st.columns([1.3, 3, 1.1])
 
 
 with empty_left:
