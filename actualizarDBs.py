@@ -323,7 +323,7 @@ for i in range(dfSIF2023.shape[0]):
         nombreCorto = dictNombresCortos[nombreFondo]
         dfSIF2023.at[i, "Nombre_Corto"] = nombreCorto
     else:
-        dfSIF2023.at[i, "Nombre_Corto"] = "-"
+        dfSIF2023.at[i, "Nombre_Corto"] = nombreFondo
 
 
 print("Corriendo Comision")
