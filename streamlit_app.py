@@ -497,7 +497,7 @@ df_downl2023 = filter_dataframeSIF(dfSIF2023)
 df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre Corto', 
+st.dataframe(df_downl2023NoDupl[['Nombre Entidad','Nombre_Corto', 
                                  "ASSET_CLASS"
                                 ]],  hide_index=True )
 
