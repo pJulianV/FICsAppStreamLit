@@ -87,7 +87,7 @@ with contents:
     st.header("Reporte de competencia industria ㅤㅤㅤㅤㅤ local de fondos")
 
 
-empty_left, contents, empty_right = st.columns([1.75, 3, 0.1])
+empty_left, contents, empty_right = st.columns([2, 3, 0.1])
 
 with contents:
     st.markdown("Fecha Corte: 05 31 2023")
