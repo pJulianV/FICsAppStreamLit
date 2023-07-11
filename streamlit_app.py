@@ -141,8 +141,7 @@ for i in range(rowCount):
         nombreCorto = dictNombresCortos[nombreFondo]
         df.at[i, "Nombre_Corto"] = nombreCorto
     else:
-        df.at[i, "Nombre_Corto"] = "-"
-
+        df.at[i, "Nombre_Corto"] = nombreFondo
 
 
 print("Corriendo Comision")
