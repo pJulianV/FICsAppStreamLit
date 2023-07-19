@@ -2,7 +2,9 @@ import pandas as pd
 from pandas import ExcelWriter
 from math import sqrt
 
-fechaCorte = "05 30 2023  0:00:00"
+
+fechaCorte = "06 30 2023  0:00:00"
+
 
 def to_excel(df):
     output = BytesIO()
@@ -28,10 +30,23 @@ dfSIF2023 = pd.read_excel("SIF_BD_2023.xlsx",
 dfSIF2023 = dfSIF2023.rename(columns={'Rentab. año':'Rentab. Ultaño'})
 
 dfSIF2023 = dfSIF2023[dfSIF2023["Fecha corte"] == fechaCorte]
+
+
+
 def agregarColumnas(df):
     df = df.assign(Rentab_Ytd= "" )
     df = df.assign(Rentab_3Y= "" )
     df = df.assign(Rentab_5Y= "" )
+    df = df.assign(Comision_Admin= "" )
+    df = df.assign(RB_mensual = "" )
+    df = df.assign(RB_semestral = "" )
+    df = df.assign(RB_Ytd = "" )
+    df = df.assign(RB_1Y = "" )
+    df = df.assign(RB_3Y = "" )
+    df = df.assign(RB_5Y = "" )
+    df = df.assign(ASSET_CLASS= "" )
+    df = df.assign(Nombre_Entidad_Corto= "" )
+    df = df.assign(Nombre_Fondo_Corto= "" )
     df = df.assign(V_mensual= "" )
     df = df.assign(V_semestral= "" )
     df = df.assign(V_Ytd= "" )
@@ -46,9 +61,6 @@ def agregarColumnas(df):
     df = df.assign(Rentab_Neg_YtD= "" )
     df = df.assign(Rentab_Neg_Semestre= "" )
     df = df.assign(Rentab_Neg_1Y= "" )
-    df = df.assign(ASSET_CLASS= "" )
-    df = df.assign(Comision_Admin= "" )
-    df = df.assign(Nombre_Corto= "" )
     return df
 
 
@@ -61,10 +73,10 @@ dfTiposFondos = pd.read_excel("BD ASSET CLASS.xlsx",
                            header= 0)
 
 
-dfTiposFondosNoDupl = dfTiposFondos.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+dfTiposFondosNoDupl = dfTiposFondos.drop_duplicates(subset=["NOMBRE NEGOCIO"], keep='first')
 
 
-diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['Nombre Negocio'],
+diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['NOMBRE NEGOCIO'],
                                   dfTiposFondosNoDupl['ASSET CLASS']
                                   ))
 
@@ -84,7 +96,7 @@ for i in range(dfSIF2023.shape[0]):
         dfSIF2023.at[i, 'ASSET_CLASS'] = "INDEFINIDO"
 
 
-
+dfPrueba = dfSIF2023
 dfSIF2023 = dfSIF2023[dfSIF2023["ASSET_CLASS"] != "CAPITAL PRIVADO"]
 dfSIF2023.reset_index(drop=True, inplace=True)
 
@@ -95,14 +107,14 @@ excel_modelo = "MODELO_TodosLosFondos.xlsb"
 dfVolatilidades = pd.read_excel(excel_modelo,
                    sheet_name= "R_diarias",
                    header=17,
-                   usecols = "C:APL",
+                   usecols = "C:APV",
                    nrows= 6
                    )
 
 dfVecesNegativo = pd.read_excel(excel_modelo,
                    sheet_name= "R_diarias",
                    header=28,
-                   usecols = "C:APL",
+                   usecols = "C:APV",
                    nrows= 5
                    )
 
@@ -110,7 +122,7 @@ dfVecesNegativo = pd.read_excel(excel_modelo,
 dfRentabilidades = pd.read_excel(excel_modelo,
                    sheet_name = "VU",
                    header = 12,
-                   usecols = "B:APK",
+                   usecols = "B:APU",
                    nrows= 6
                    )
 df_IBR = pd.read_excel(excel_modelo,
@@ -154,7 +166,7 @@ dictVecesNegativo = listasADiccionarios(dfVecesNegativo)
 dictIBR = listasADiccionarios(df_IBR)
 
 
-dictNombresCortos = dict(zip(dfIndustriaLocal['concatenar'],
+dictNombresCortos = dict(zip(dfIndustriaLocal['Nombre Negocio'],
                                   dfIndustriaLocal['Nombre Corto']
                                   ))
 
@@ -162,6 +174,9 @@ dictComisionAdmin = dict(zip(dfIndustriaLocal['concatenar'],
                                   dfIndustriaLocal['Comisión admin(%)']
                                   )) 
 
+dictEntidadCorto = dict(zip(dfIndustriaLocal['Nombre Entidad'],
+                                  dfIndustriaLocal['Nombre Corto Entidad']
+                                  ))
 
 
 def revisarDicts(dict):
@@ -220,6 +235,44 @@ for i in range(dfSIF2023.shape[0]):
         dfSIF2023.at[i,"Rentab_Ytd"] = "-"
         dfSIF2023.at[i,"Rentab_3Y"] = "-"
         dfSIF2023.at[i,"Rentab_5Y"] = "-"
+
+
+
+
+print("Corriendo Rentabilidades brutas")
+def calcularRB(rentabilidad, comision):
+    
+    try:
+        rentB = (1+rentabilidad)/(1+(comision/100))-1
+
+    except:
+        rentB = "ND"
+
+    return rentB
+
+
+for i in range(dfSIF2023.shape[0]):
+
+    nombreFondo = dfSIF2023["concatenar"][i]
+    if nombreFondo in dictComisionAdmin :
+
+        comision = dictComisionAdmin[nombreFondo]
+
+        dfSIF2023.at[i, "RB_mensual"] = calcularRB(dfSIF2023["Rentab. mes"][i], comision)
+        dfSIF2023.at[i, "RB_semestral"] = calcularRB(dfSIF2023["Rentab. sem"][i], comision)
+        dfSIF2023.at[i, "RB_Ytd"] = calcularRB(dfSIF2023["Rentab_Ytd"][i], comision)
+        dfSIF2023.at[i, "RB_1Y"] = calcularRB(dfSIF2023["Rentab. Ultaño"][i], comision)
+        dfSIF2023.at[i, "RB_3Y"] = calcularRB(dfSIF2023["Rentab_3Y"][i], comision)
+        dfSIF2023.at[i, "RB_5Y"] = calcularRB(dfSIF2023["Rentab_5Y"][i], comision)
+
+    else:
+        dfSIF2023.at[i, "RB_mensual"] = "-" 
+        dfSIF2023.at[i, "RB_semestral"] = "-" 
+        dfSIF2023.at[i, "RB_Ytd"] = "-" 
+        dfSIF2023.at[i, "RB_1Y"] = "-" 
+        dfSIF2023.at[i, "RB_3Y"] = "-" 
+        dfSIF2023.at[i, "RB_5Y"] = "-" 
+    
 
 
 
@@ -314,6 +367,7 @@ for i in range(dfSIF2023.shape[0]):
 
 
 
+listNombreCorto = []
 
 print("Corriendo Nombre Corto")
 for i in range(dfSIF2023.shape[0]):
@@ -321,9 +375,27 @@ for i in range(dfSIF2023.shape[0]):
     nombreFondo = dfSIF2023["Nombre Negocio"][i]
     if nombreFondo in dictNombresCortos:
         nombreCorto = dictNombresCortos[nombreFondo]
-        dfSIF2023.at[i, "Nombre_Corto"] = nombreCorto
+        dfSIF2023.at[i, "Nombre_Fondo_Corto"] = nombreCorto
     else:
-        dfSIF2023.at[i, "Nombre_Corto"] = nombreFondo
+        listNombreCorto.append(nombreFondo)
+        dfSIF2023.at[i, "Nombre_Fondo_Corto"] = nombreFondo
+
+
+
+listNombreCortoEnt = []
+
+print("Corriendo Nombre Corto Entidad")
+for i in range(dfSIF2023.shape[0]):
+
+    nombreEntidad = dfSIF2023["Nombre Entidad"][i]
+    if nombreEntidad in dictEntidadCorto:
+        nombreCorto = dictEntidadCorto[nombreEntidad]
+        dfSIF2023.at[i, "Nombre_Entidad_Corto"] = nombreCorto
+    else:
+        listNombreCortoEnt.append(nombreEntidad)
+        dfSIF2023.at[i, "Nombre_Entidad_Corto"] = nombreEntidad
+
+
 
 
 print("Corriendo Comision")
@@ -338,16 +410,45 @@ for i in range(dfSIF2023.shape[0]):
 
 
 
+dfSIF2023SinFilt = dfSIF2023
+
+dfSIF2023 = dfSIF2023[["concatenar","Fecha corte","ASSET_CLASS", "Nombre_Entidad_Corto", "Nombre_Fondo_Corto", "Cons. id Part.", "Núm. unidades", "Valor unidad para las operaciones del día t", "Valor fondo al cierre del día t", "Núm. Invers.", "Comision_Admin", "Rentab. dia",	"Rentab. mes",	"Rentab. sem",	"Rentab. Ultaño",	"Rentab_Ytd",	"Rentab_3Y",	"Rentab_5Y", "RB_mensual",	"RB_semestral",	"RB_Ytd",	"RB_1Y",	"RB_3Y",	"RB_5Y", "V_mensual",	"V_semestral",	"V_Ytd",	"V_1Y",	"V_3Y",	"V_5Y", "Sharpe_1Y",	"Sharpe_3Y",	"Sharpe_5Y", "Rentab_Neg_semana",	"Rentab_Neg_mes",	"Rentab_Neg_YtD",	"Rentab_Neg_Semestre",	"Rentab_Neg_1Y"
+
+
+]]
+
+
+dfSIF2023.rename(columns={ 'Cons. id Part.': 'ID Participacion' })
+# dfSIF2023.rename(columns={ 'Nombre_Corto': 'Nombre Fondo' })
+
+
+dfSIF2023.columns = dfSIF2023.columns.str.replace('Cons. id Part.', 'ID Participacion')
+# dfSIF2023.columns = dfSIF2023.columns.str.replace('Nombre_Fondo_Corto', 'Nombre Fondo')
+# dfSIF2023.columns = dfSIF2023.columns.str.replace('Nombre_Entidad_Corto', 'Nombre Entidad')
+
+
+
 
 writer = ExcelWriter('SIF_2023Actualizado.xlsx')
 dfSIF2023.to_excel(writer, 'SIF_2023Actualizado', index=False)
 writer.close()
 
 
-dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["concatenar"], keep='first')
-print(dfSIF2023NoDupl.shape[0])
 
-
-writer = ExcelWriter('SIF_2023NoDuplAct.xlsx')
-dfSIF2023NoDupl.to_excel(writer, 'SIF_2023NoDuplAct', index=False)
+writer = ExcelWriter('SIF_2023Prueba.xlsx')
+dfPrueba.to_excel(writer, 'SIF_2023Prueba', index=False)
 writer.close()
+
+
+writer = ExcelWriter('SIF_2023AllCol.xlsx')
+dfSIF2023SinFilt.to_excel(writer, 'SIF_2023AllCol', index=False)
+writer.close()
+
+
+
+print("Nombre Corto Entidad: ",len(listNombreCortoEnt))
+print("Nombre Corto: ",len(listNombreCorto))
+
+print("dfSIF2023 rows: ", dfSIF2023.shape[0])
+print("dfSIF sin Capital Privado rows: ", dfPrueba.shape[0])
+
