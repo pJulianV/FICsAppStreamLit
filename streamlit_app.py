@@ -478,12 +478,12 @@ def seleccionarFondo(df):
         disabled=["widgets"],
         hide_index=True,
     )
-    filter_dataframeSIF(dfSelect)
     return dfSelect
 
 
 def crearDictSelect(df, llave):
     dfSelect = seleccionarFondo(df)
+    filter_dataframeSIF(dfSelect)
     dictSelect = dict(zip( dfSelect[llave],
                        dfSelect['Select']
                       ))
