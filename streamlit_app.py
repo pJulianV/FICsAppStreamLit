@@ -547,25 +547,16 @@ with col1:
 
 
 
-# ! Descargar por CSV
-def convert_df(df):
-   return df.to_csv(index=False).encode('utf-8')
-
-
-csv = convert_df(df_downl)
-
-st.text(" ")
 
 
 
 
+# col1, col2, col3 = st.columns(3)
 
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.download_button(label='Generar Informe',
-                                    data=to_excel(df_downl) ,
-                                    file_name= 'MisFondos.xlsx')
+# with col1:
+#     st.download_button(label='Generar Informe',
+#                                     data=to_excel(df_downl) ,
+#                                     file_name= 'MisFondos.xlsx')
 
 
 
