@@ -478,10 +478,12 @@ def seleccionarFondo(df):
         disabled=["widgets"],
         hide_index=True,
     )
+    filter_dataframe(dfSelect)
     return dfSelect
 
 
 def crearDictSelect(df, llave):
+
     dfSelect = seleccionarFondo(df)
 
     dictSelect = dict(zip( dfSelect[llave],
@@ -496,6 +498,8 @@ def crearDictSelect(df, llave):
     return dictSelect, dictTrueSelect
 
 dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+
+
 dictSelect70,dictTrueSelect70 = crearDictSelect(dfNoDupl, 'Nombre_Fondo_Corto')
 
 
