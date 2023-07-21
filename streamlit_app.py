@@ -478,6 +478,7 @@ def seleccionarFondo(df):
         disabled=["widgets"],
         hide_index=True,
     )
+    filter_dataframeSIF(dfSelect)
     return dfSelect
 
 
@@ -672,11 +673,11 @@ for fondo in dictTrueSelectTodos:
     dfTodosVacio = pd.concat([dfTodosVacio, dfTodos], axis=0)
 
 
-dfTodosFilter = filter_dataframeSIF(dfTodosVacio)
 
-dfTodosFilter
 
-st.dataframe(dfTodosFilter[['Nombre_Entidad_Corto', 'Nombre_Fondo_Corto',
+
+
+st.dataframe(dfTodosVacio[['Nombre_Entidad_Corto', 'Nombre_Fondo_Corto',
                                  "ASSET_CLASS"
                                  ]],  hide_index=True)
 
