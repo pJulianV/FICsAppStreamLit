@@ -500,7 +500,7 @@ def crearDictSelect(df, llave):
 dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-dictSelect70,dictTrueSelect70 = crearDictSelect(dfNoDupl, 'Nombre_Fondo_Corto')
+dictSelect70,dictTrueSelect70 = crearDictSelect(filter_dataframe(dfNoDupl), 'Nombre_Fondo_Corto')
 
 
 df70Vacio = pd.DataFrame()
@@ -666,7 +666,8 @@ dfSIF2023 = dfSIF2023.assign(Select= False )
 
 dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
 
-dictSelectTodos,dictTrueSelectTodos = crearDictSelect(dfSIF2023NoDupl, "Nombre_Fondo_Corto")
+dictSelectTodos, dictTrueSelectTodos = crearDictSelect(
+    filter_dataframeSIF(dfSIF2023NoDupl), "Nombre_Fondo_Corto")
 
 
 dfTodosVacio = pd.DataFrame()
