@@ -466,7 +466,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 def seleccionarFondo(df):
     df2 = filter_dataframe(df)
-    df2
     dfSelect = st.data_editor(
         df2,
         column_order=("Select","Nombre_Entidad_Corto", "Nombre_Fondo_Corto", "ASSET_CLASS"),
