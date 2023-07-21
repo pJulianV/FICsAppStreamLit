@@ -671,6 +671,14 @@ for fondo in dictTrueSelectTodos:
     dfTodos = dfSIF2023.loc[dfSIF2023["Nombre_Fondo_Corto"]== fondo]
     dfTodosVacio = pd.concat([dfTodosVacio, dfTodos], axis=0)
 
+
+dfTodosFilter = filter_dataframeSIF(dfTodosVacio)
+
+st.dataframe(dfTodosFilter[['Nombre_Entidad_Corto', 'Nombre_Fondo_Corto',
+                                 "ASSET_CLASS"
+                                 ]],  hide_index=True)
+
+
 col1, col2, col3 = st.columns([2, 1, 0.1])
 
 with col1:
