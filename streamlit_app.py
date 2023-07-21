@@ -521,29 +521,29 @@ with col1:
                        )
 
 
-df_downl =filter_dataframe(df)
+# df_downl =filter_dataframe(df)
 
-df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
-
-
+# df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
 
 
 
 
 
 
-st.dataframe(df_downlNoDupl[['Nombre_Entidad_Corto','Nombre_Fondo_Corto'
-                             , "ASSET_CLASS"
-                            ]],  hide_index=True )
 
-df_downl = df_downl[["ASSET_CLASS", "Nombre_Entidad_Corto", "Nombre_Fondo_Corto",	"Valor fondo",
-         "# Inversionistas", 	"Tipo de participación ficha técnica", "Comision_Admin",	"Duracion Años",	"Tipo de participación (TP)",
-         "RN.mensual",	"RN.semestral",	"RN.Ytd",	"RN. 1Y", "RN. 3Y", "RN. 5Y",
-         "RB_mensual", "RB_semestral", "RB_Ytd", "RB_1Y", "RB_3Y", "RB_5Y" ,"V.mensual",
-         "V.semestral", "V.Ytd", "V. 1Y", "V. 3Y",	"V. 5Y", "Sharpe.1Y", "Sharpe.3Y",
-         "Sharpe.5Y",	"# veces con RN<0 semana",	"# veces con RN<0 mes",
-         "# veces con RN<0 YtD",	"# veces con RN<0 1Y"
-]]
+
+# st.dataframe(df_downlNoDupl[['Nombre_Entidad_Corto','Nombre_Fondo_Corto'
+#                              , "ASSET_CLASS"
+#                             ]],  hide_index=True )
+
+# df_downl = df_downl[["ASSET_CLASS", "Nombre_Entidad_Corto", "Nombre_Fondo_Corto",	"Valor fondo",
+#          "# Inversionistas", 	"Tipo de participación ficha técnica", "Comision_Admin",	"Duracion Años",	"Tipo de participación (TP)",
+#          "RN.mensual",	"RN.semestral",	"RN.Ytd",	"RN. 1Y", "RN. 3Y", "RN. 5Y",
+#          "RB_mensual", "RB_semestral", "RB_Ytd", "RB_1Y", "RB_3Y", "RB_5Y" ,"V.mensual",
+#          "V.semestral", "V.Ytd", "V. 1Y", "V. 3Y",	"V. 5Y", "Sharpe.1Y", "Sharpe.3Y",
+#          "Sharpe.5Y",	"# veces con RN<0 semana",	"# veces con RN<0 mes",
+#          "# veces con RN<0 YtD",	"# veces con RN<0 1Y"
+# ]]
 
 
 
