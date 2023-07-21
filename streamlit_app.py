@@ -674,6 +674,8 @@ for fondo in dictTrueSelectTodos:
 
 dfTodosFilter = filter_dataframeSIF(dfTodosVacio)
 
+dfTodosFilter
+
 st.dataframe(dfTodosFilter[['Nombre_Entidad_Corto', 'Nombre_Fondo_Corto',
                                  "ASSET_CLASS"
                                  ]],  hide_index=True)
