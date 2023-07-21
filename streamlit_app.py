@@ -483,7 +483,7 @@ def seleccionarFondo(df):
 
 def crearDictSelect(df, llave):
     dfSelect = seleccionarFondo(df)
-    filter_dataframeSIF(dfSelect)
+
     dictSelect = dict(zip( dfSelect[llave],
                        dfSelect['Select']
                       ))
