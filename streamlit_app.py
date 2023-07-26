@@ -290,6 +290,9 @@ st.text(" ")
 
 # ! Descargar por Excel
 @st.cache_data(ttl=3600)
+
+
+
 def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -489,6 +492,9 @@ def crearDictSelect(df, llave, filter_dataframe):
 
     dfPermanecer = seleccionarFondo(df)
 
+    dfFunctionFilter = filter_dataframe(dfPermanecer)
+
+    dfFunctionFilter
 
     df_mask = dfPermanecer['Select']==True
 
@@ -535,9 +541,6 @@ dfSelect, dictSelect70,dictTrueSelect70 = crearDictSelect(dfNoDupl, 'Nombre_Fond
 dfNoDupl = dfSelect
 
 
-dfSelect = filter_dataframe(dfSelect)
-
-dfSelect, dictSelect70,dictTrueSelect70 = crearDictSelect(dfSelect, 'Nombre_Fondo_Corto', filter_dataframe)
 
 dictSelect
 
