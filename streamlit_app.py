@@ -465,9 +465,9 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def seleccionarFondo(df):
-    df2 = filter_dataframe(df)
-    dfSelect = st.data_editor(
-        df2,
+    
+    df = st.data_editor(
+        df,
         column_order=("Select","Nombre_Entidad_Corto", "Nombre_Fondo_Corto", "ASSET_CLASS"),
         column_config={
             "Select": st.column_config.CheckboxColumn(
@@ -478,28 +478,69 @@ def seleccionarFondo(df):
         disabled=["widgets"],
         hide_index=True,
     )
-    return dfSelect
+
+    return df
 
 
-def crearDictSelect(df, llave):
+dictSelect = {"a": 1}
 
-    dfSelect = seleccionarFondo(df)
 
-    dictSelect = dict(zip( dfSelect[llave],
-                       dfSelect['Select']
+def crearDictSelect(df, llave, filter_dataframe):
+
+    dfPermanecer = seleccionarFondo(df)
+
+
+    df_mask = dfPermanecer['Select']==True
+
+    filtered_df = dfPermanecer[df_mask] 
+    
+
+    dictPermanecer = dict(zip( filtered_df[llave],
+                       filtered_df['Select']
                       ))
+
+
+
+    global dictSelect
+    
+    dictPermanecer
+
+    dictSelect.update(dictPermanecer)
+
+    
+    df = df.reset_index()
+    dfSelect = df
+
+    for i in range(dfSelect.shape[0]):
+
+        nombreFondo = dfSelect[llave][i]
+
+        if nombreFondo in dictPermanecer:
+
+            dfSelect.at[i, "Select"] = True
+
     dictTrueSelect = {}
-    for fondo in dictSelect:
-        if dictSelect[fondo] == True:
-            dictTrueSelect.update({fondo: dictSelect[fondo]})
+    for fondo in dictPermanecer:
+        if dictPermanecer[fondo] == True:
+            dictTrueSelect.update({fondo: dictPermanecer[fondo]})
+
             
 
-    return dictSelect, dictTrueSelect
+    return dfSelect, dictPermanecer, dictTrueSelect
 
 dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
 
-dictSelect70,dictTrueSelect70 = crearDictSelect(dfNoDupl, 'Nombre_Fondo_Corto')
+dfSelect, dictSelect70,dictTrueSelect70 = crearDictSelect(dfNoDupl, 'Nombre_Fondo_Corto', filter_dataframe)
+dfNoDupl = dfSelect
+
+
+dfSelect = filter_dataframe(dfSelect)
+
+dfSelect, dictSelect70,dictTrueSelect70 = crearDictSelect(dfSelect, 'Nombre_Fondo_Corto', filter_dataframe)
+
+dictSelect
+
 
 
 df70Vacio = pd.DataFrame()
@@ -617,7 +658,7 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
             df = df[df[column].isin(user_cat_input)]
 
 
-    return df
+    st.dataframe(df)
 
 
 
@@ -656,8 +697,8 @@ dfSIF2023 = dfSIF2023.assign(Select= False )
 
 dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
 
-dictSelectTodos, dictTrueSelectTodos = crearDictSelect(
-    dfSIF2023NoDupl, "Nombre_Fondo_Corto")
+dfSIF2023NoDupl, dictSelectTodos, dictTrueSelectTodos = crearDictSelect(
+    dfSIF2023NoDupl, "Nombre_Fondo_Corto", filter_dataframeSIF)
 
 
 dfTodosVacio = pd.DataFrame()
@@ -671,10 +712,9 @@ for fondo in dictTrueSelectTodos:
 
 
 
+col1, col2, col3 = st.columns(3)
 
-st.dataframe(dfTodosVacio[['Nombre_Entidad_Corto', 'Nombre_Fondo_Corto',
-                                 "ASSET_CLASS"
-                                 ]],  hide_index=True)
+
 
 
 col1, col2, col3 = st.columns([2, 1, 0.1])
@@ -686,30 +726,30 @@ with col1:
                        )
 
 
-df_downl2023 = filter_dataframeSIF(dfSIF2023)
+# df_downl2023 = filter_dataframeSIF(dfSIF2023)
 
 
-df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
-
-
-
-st.dataframe(df_downl2023NoDupl[['Nombre_Entidad_Corto','Nombre_Fondo_Corto',
-                                 "ASSET_CLASS"
-                                ]],  hide_index=True )
+# df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
 
 
 
+# st.dataframe(df_downl2023NoDupl[['Nombre_Entidad_Corto','Nombre_Fondo_Corto',
+#                                  "ASSET_CLASS"
+#                                 ]],  hide_index=True )
 
 
-col1, col2, col3 = st.columns(3)
 
 
-with col1:
 
-    st.download_button(label='Generar Informe SIF',
-                       data=to_excel(df_downl2023) ,
-                       file_name= 'SIFInforme.xlsx'
-                       )
+# col1, col2, col3 = st.columns(3)
+
+
+# with col1:
+
+#     st.download_button(label='Generar Informe SIF',
+#                        data=to_excel(df_downl2023) ,
+#                        file_name= 'SIFInforme.xlsx'
+#                        )
 
 
 # def load_data(sheets_url):
