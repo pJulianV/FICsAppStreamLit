@@ -1,12 +1,13 @@
 # ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
-# cd OneDrive - Grupo Bancolombia\Workspace\FicsAppStreamLit\VersionEntregable
+# cd OneDrive - Grupo Bancolombia\Workspace\FicsAppStreamLit\
 # cd Workspace\FIC StreamLit
 # streamlit run streamlit_app.py
 
 # pip install -r requirements.txt
 
-# pip install ______ -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
+
+# pip install    qgrid     -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
 
 # pip install -r requirements.txt -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
 
@@ -37,6 +38,8 @@ from PIL import Image
 
 
 from openpyxl.styles import Font
+
+import asyncio
 
 
 
@@ -123,8 +126,6 @@ df = pd.read_excel(excel_file,
                    header=0,
                    usecols = "A:AF",
                    )
-
-df.sort_values(by="Nombre Negocio")
 
 dfTiposFondos = pd.read_excel("BD ASSET CLASS.xlsx",
                            sheet_name= "Hoja1",
@@ -269,6 +270,61 @@ diccionarioTiposFondos = dict(zip(dfTiposFondosNoDupl['NOMBRE NEGOCIO'],
 #                                   dfTiposFondosNoDupl['NOMBRE CORTO ADMINISTRADORA']
 #                                   ))
 
+st.text(" ")
+st.text(" ")
+st.text(" ")
+
+
+
+col1, col2, col3 = st.columns([1.5, 2, 0.1])
+
+with col2:
+
+    st.subheader("Tutorial")
+
+
+with st.expander("Hacer Busquedas"):
+    st.subheader("Usted puede buscar en cada tabla")
+    st.markdown("1. De **_clic encima_** de la tabla.")
+    st.markdown("2. Use **_Ctrl + F_** para abrir buscador")
+    st.markdown("3. Ingrese las palabras cable que quiere buscar")
+
+
+
+    imgf1 = Image.open("img/busqueda.png")
+    st.image(imgf1, use_column_width=True)
+
+    st.text(" ")
+
+
+
+with st.expander("Abreviaturas"):
+
+    empty_left, contents, empty_right = st.columns([2.75, 2.2, 2])
+
+
+
+    with empty_left:
+
+
+        st.markdown("SN - SENTENCIAS NACION")
+        st.markdown("PP - PACTO DE PERMANENCIA")
+
+    with contents:
+        st.markdown("RF - RENTA FIJA")
+        st.markdown("LP - LARGO PLAZO")
+
+    with empty_right:
+        st.markdown("TS - TASA FIJA")
+        st.markdown("COL - COLOMBIA")
+
+st.success(
+"""
+   ㅤㅤㅤㅤㅤㅤAl final los fondos que tenga seleccion ✅ seran los descargados
+""",
+icon="💵",)
+
+
 
 for i in range(df.shape[0]):
 
@@ -283,10 +339,7 @@ for i in range(df.shape[0]):
         df.at[i, 'ASSET_CLASS'] = "INDEFINIDO"
 
 
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
+
 st.text(" ")
 st.text(" ")
 st.text(" ")
@@ -297,7 +350,7 @@ st.text(" ")
 st.text(" ")
 st.text(" ")
 
-empty_left, contents, empty_right = st.columns([0.75, 3, 0.75])
+empty_left, contents, empty_right = st.columns([0.95, 3, 0.75])
 
 with contents:
     st.subheader("Descargue nuestros :red[_fondos sugeridos_]")
@@ -308,10 +361,11 @@ st.text(" ")
 
 
 
+
 # ! Descargar por Excel
 @st.cache_data(ttl=3600)
 
-def to_excel(df):
+def to_excel(df, numeroFondos):
     # output = BytesIO()
     # writer = pd.ExcelWriter(output, engine='xlsxwriter')
     # df.to_excel(writer, index=False, sheet_name='Sheet1')
@@ -334,17 +388,21 @@ def to_excel(df):
 
     for r_idx, row in enumerate(rows, 1):
         for c_idx, value in enumerate(row, 1):
-             ws.cell(row=r_idx+11, column=c_idx+1, value=value)
+             ws.cell(row=r_idx+10, column=c_idx, value=value)
 
 
 
 
-    ws.delete_cols(2)
-    ws.insert_cols(2)
-    ws.delete_rows(13)
+    ws.delete_cols(1)
+    ws.delete_rows(12)
 
 
-    headers = ws["C12":"AN12"]
+    if numeroFondos == "70":
+        headers = ws["A11":"AH11"]
+    elif numeroFondos == "All":
+        headers = ws["A11":"AL11"]
+
+
     fuente = Font( bold=True , color='FFFFFF')
 
     for row in headers:
@@ -377,97 +435,24 @@ df_filtrado = df[["ASSET_CLASS", "Nombre_Entidad_Corto", "Nombre_Fondo_Corto",	"
 
 # df_filtrado.columns = df_filtrado.columns.str.replace('Nombre_Corto', 'Nombre Fondo')
 
+df_filtrado['Nombre_Entidad_Corto'] = df_filtrado['Nombre_Entidad_Corto'].str.upper()
+df_filtrado['Nombre_Fondo_Corto'] = df_filtrado['Nombre_Fondo_Corto'].str.upper()
+df_filtrado = df_filtrado.sort_values(by="Nombre_Fondo_Corto", ascending=True)
 
-col1, col2, col3 = st.columns([1, 2, 0.1])
+col1, col2, col3 = st.columns([1.20, 2, 0.1])
+
+
+
 
 
 with col2:
     # with open(excel_file, 'rb') as my_file:
     st.download_button(label='Generar Informe Sugeridos',
-                       data=to_excel(df_filtrado) ,
+                       data=to_excel(df_filtrado, "70") ,
                        file_name= 'FondosSugeridos.xlsx'
                        )
 
 
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-
-
-st.text(" ")
-st.text(" ")
-st.text(" ")
-
-
-
-
-col1, col2, col3 = st.columns([1, 2, 0.1])
-
-
-with col2:
-
-    st.subheader("Como usar los filtros")
-
-
-
-with st.expander("Filtrar solo por nombre"):
-    imgf1 = Image.open("img/filtersnombre.png")
-    st.image(imgf1, use_column_width=True)
-
-
-with st.expander("Filtrar solo por asset class"):
-    imgf2 = Image.open("img/filtersasset.png")
-    st.image(imgf2, use_column_width=True)
-
-with st.expander("Filtrar por asset class y por nombre"):
-    imgf1 = Image.open("img/filtersnombreasset.png")
-    st.image(imgf1, use_column_width=True)
-
-    st.text(" ")
-
-
-st.success(
-"""
-   ㅤAl final los fondos que queden dentro de recuadro **\"Nombre Negocio\"** seran los descargados
-""",
-icon="💵",)
-
-
-with st.expander("Abreviaturas"):
-
-    empty_left, contents, empty_right = st.columns([2.75, 2.2, 2])
-
-
-
-    with empty_left:
-
-        st.markdown("ㅤ")
-        st.markdown("SN - SENTENCIAS NACION")
-        st.markdown("PP - PACTO DE PERMANENCIA")
-
-    with contents:
-        st.markdown("ㅤ")
-        st.markdown("RF - RENTA FIJA")
-        st.markdown("LP - LARGO PLAZO")
-
-    with empty_right:
-        st.markdown("ㅤ")
-        st.markdown("TS - TASA FIJA")
-        st.markdown("COL - COLOMBIA")
-
-
-st.text(" ")
-st.text(" ")
 st.text(" ")
 st.text(" ")
 st.text(" ")
@@ -490,6 +475,43 @@ with contents:
 
 
 st.text(" ")
+
+dfCheckColumn = pd.DataFrame
+
+# async def guardaChecks(df): #Simple async def
+#     df = pd.DataFrame
+#     dfCheckColumn = df["Select"]
+#     return dfCheckColumn
+
+# async def main_def(df):
+    
+#     df = st.data_editor(
+#         filter_dataframe(df),
+#         column_order=("Select","Nombre_Entidad_Corto", "Nombre_Fondo_Corto", "ASSET_CLASS"),
+#         column_config={
+#             "Select": st.column_config.CheckboxColumn(
+#                 help="Selecciona tus **fondos**",
+#                 default=False,
+#             )
+#         },
+#         disabled=["widgets"],
+#         hide_index=True,
+#     )
+#     await asyncio.gather(guardaChecks(df))
+    
+
+
+# asyncio.run(main_def())
+# # The function you wait for must include async
+# # The function you use await must include async
+# # The function you use await must run by asyncio.run(THE_FUNC())
+
+
+
+
+
+
+
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     modify = st.checkbox("Add filters")
@@ -571,9 +593,26 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def eleguirAsset(df):
+    
+    
+    # col1, col2, col3 = st.columns([1.20, 2, 0.1])
+
+    #     with col2:
+
+            # asset1525 = st.checkbox("1525")
+        # rentaFija = st.checkbox("RENTA FIJA")
+
+
+    return df
 
 def seleccionarFondo(df):
     
+    df = df.sort_values(by="ASSET_CLASS", ascending=True)
+
+    df['Nombre_Entidad_Corto'] = df['Nombre_Entidad_Corto'].str.upper()
+    df['Nombre_Fondo_Corto'] = df['Nombre_Fondo_Corto'].str.upper()
+
     df = st.data_editor(
         df,
         column_order=("Select","Nombre_Entidad_Corto", "Nombre_Fondo_Corto", "ASSET_CLASS"),
@@ -587,121 +626,121 @@ def seleccionarFondo(df):
         hide_index=True,
     )
 
+    df = df.sort_values(by="Nombre_Fondo_Corto", ascending=True)
+    df = eleguirAsset(df)
     return df
 
 
 dictSelect = {"a": 1}
 
 
-# def crearDictSelect(df, llave, filter_dataframe):
+def crearDictSelect(df, llave):
 
-#     dfPermanecer = seleccionarFondo(df)
+    dfPermanecer = seleccionarFondo(df)
 
-#     dfFunctionFilter = filter_dataframe(dfPermanecer)
+    # df_mask = dfPermanecer['Select']==True
 
-#     df_mask = dfPermanecer['Select']==True
-
-#     filtered_df = dfPermanecer[df_mask] 
+    # filtered_df = dfPermanecer[df_mask] 
     
 
-#     dictPermanecer = dict(zip( filtered_df[llave],
-#                        filtered_df['Select']
-#                       ))
+    dictPermanecer = dict(zip( dfPermanecer[llave],
+                       dfPermanecer['Select']
+                      ))
 
 
 
-#     global dictSelect
+    # global dictSelect
 
-#     dictSelect.update(dictPermanecer)
+    # dictSelect.update(dictPermanecer)
 
     
-#     df = df.reset_index()
-#     dfSelect = df
+    df = df.reset_index()
+    dfSelect = df
 
-#     for i in range(dfSelect.shape[0]):
+    for i in range(dfSelect.shape[0]):
 
-#         nombreFondo = dfSelect[llave][i]
+        nombreFondo = dfSelect[llave][i]
 
-#         if nombreFondo in dictPermanecer:
+        if nombreFondo in dictPermanecer:
 
-#             dfSelect.at[i, "Select"] = True
+            dfSelect.at[i, "Select"] = True
 
-#     dictTrueSelect = {}
-#     for fondo in dictPermanecer:
-#         if dictPermanecer[fondo] == True:
-#             dictTrueSelect.update({fondo: dictPermanecer[fondo]})
+    dictTrueSelect = {}
+    for fondo in dictPermanecer:
+        if dictPermanecer[fondo] == True:
+            dictTrueSelect.update({fondo: dictPermanecer[fondo]})
 
             
 
-#     return dfSelect, dictPermanecer, dictTrueSelect
+    return dfSelect, dictPermanecer, dictTrueSelect
 
-# dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
+dfNoDupl= df.drop_duplicates(subset=["Nombre Negocio"], keep='first')
 
-
-# dfSelect, dictSelect70,dictTrueSelect70 = crearDictSelect(dfNoDupl, 'Nombre_Fondo_Corto', filter_dataframe)
-# dfNoDupl = dfSelect
-
-
-
-
-
-
-# df70Vacio = pd.DataFrame()
-
-# for fondo in dictTrueSelect70:
-    
-#     df70 = df.loc[df["Nombre_Fondo_Corto"]== fondo]
-#     df70Vacio = pd.concat([df70Vacio, df70], axis=0)
-
-
-# col1, col2, col3 = st.columns(3)
-
-
-# with col1:
-
-#     st.download_button(label='Generar Informe 70 Check',
-#                        data=to_excel(df70Vacio) ,
-#                        file_name= 'Informe70Check.xlsx'
-#                        )
-
-
-df_downl =filter_dataframe(df)
-
-df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
-
-
-
-
-
-
-
-
-st.dataframe(df_downlNoDupl[['Nombre_Entidad_Corto','Nombre_Fondo_Corto'
-                             , "ASSET_CLASS"
-                            ]],  hide_index=True )
-
-
-df_downl = df_downl[["ASSET_CLASS", "Nombre_Entidad_Corto", "Nombre_Fondo_Corto",	"Valor fondo",
+dfNoDupl = dfNoDupl[["ASSET_CLASS", "Nombre_Entidad_Corto", "Nombre_Fondo_Corto",	"Valor fondo",
          "# Inversionistas", 	"Tipo de participación ficha técnica", "Comision_Admin",	"Duracion Años",	"Tipo de participación (TP)",
          "RN.mensual",	"RN.semestral",	"RN.Ytd",	"RN. 1Y", "RN. 3Y", "RN. 5Y",
          "RB_mensual", "RB_semestral", "RB_Ytd", "RB_1Y", "RB_3Y", "RB_5Y" ,"V.mensual",
          "V.semestral", "V.Ytd", "V. 1Y", "V. 3Y",	"V. 5Y", "Sharpe.1Y", "Sharpe.3Y",
          "Sharpe.5Y",	"# veces con RN<0 semana",	"# veces con RN<0 mes",
-         "# veces con RN<0 YtD",	"# veces con RN<0 1Y"
+         "# veces con RN<0 YtD",	"# veces con RN<0 1Y", "Select"
 ]]
 
 
+dfSelect, dictSelect70,dictTrueSelect70 = crearDictSelect(dfNoDupl, 'Nombre_Fondo_Corto', )
 
 
 
 
 
-col1, col2, col3 = st.columns(3)
+df70Vacio = pd.DataFrame()
 
-with col1:
-    st.download_button(label='Generar Informe',
-                                    data=to_excel(df_downl) ,
-                                    file_name= 'MisFondos.xlsx')
+for fondo in dictTrueSelect70:
+    
+    df70 = df.loc[df["Nombre_Fondo_Corto"]== fondo]
+    df70Vacio = pd.concat([df70Vacio, df70], axis=0)
+
+
+
+
+col1, col2, col3 = st.columns([2, 1, 0.1])
+
+if df70Vacio.empty:
+
+    with col1:
+        st.download_button(label='Generar Informe 70 Check',
+
+                        data=to_excel(df_filtrado, "70") ,
+                        file_name= 'Informe70Check.xlsx'
+                        )
+
+else:
+    
+    
+    df70Vacio = df70Vacio.sort_values(by="Nombre_Fondo_Corto", ascending=True)
+    with col1:
+        st.download_button(label='Generar Informe 70 Check',
+                        data=to_excel(df70Vacio.drop(columns=['Select']), "70") ,
+                        file_name= 'SIFInformeCheck.xlsx'
+                        )
+
+
+# df_downl =filter_dataframe(df)
+
+# df_downlNoDupl = df_downl.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
+
+
+
+# col1, col2, col3 = st.columns(3)
+
+
+
+# df_downl2023 = df_downl.sort_values(by="Nombre_Fondo_Corto", ascending=True)
+
+
+# with col1:
+#     st.download_button(label='Generar Informe',
+#                                     data=to_excel(df_downl, "70") ,
+#                                     file_name= 'MisFondos.xlsx')
 
 
 
@@ -711,11 +750,6 @@ st.text(" ")
 st.text(" ")
 st.text(" ")
 st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-st.text(" ")
-
 
 
 # ! SIF 2023!!!
@@ -764,7 +798,9 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-
+st.text(" ")
+st.text(" ")
+st.text(" ")
 
 empty_left, contents, empty_right = st.columns([0.6, 2, 0.1])
 
@@ -789,6 +825,7 @@ def load_data(excel,sheet):
     df = pd.read_excel(excel,
                 sheet_name= sheet,
                   header= 0)
+
     return df
 
 
@@ -798,21 +835,67 @@ dfSIF2023 = load_data(excelSIF2023,sheetSIF2023)
 
 dfSIF2023 = dfSIF2023.assign(Select= False )
 
+dfSIF2023 = dfSIF2023[["concatenar",	"Fecha corte",	"ASSET_CLASS",	"Nombre_Entidad_Corto",	"Nombre_Fondo_Corto",	"ID Participacion",	"Núm. unidades",	"Valor unidad para las operaciones del día t",	"Valor fondo al cierre del día t",	"Núm. Invers.",	"Comision_Admin",	"Rentab. dia",	"Rentab. mes",	"Rentab. sem",	"Rentab. Ultaño",	"Rentab_Ytd",	"Rentab_3Y",	"Rentab_5Y",	"RB_mensual",	"RB_semestral",	"RB_Ytd",	"RB_1Y",	"RB_3Y",	"RB_5Y",	"V_mensual",	"V_semestral",	"V_Ytd",	"V_1Y",	"V_3Y",	"V_5Y",	"Sharpe_1Y",	"Sharpe_3Y",	"Sharpe_5Y",	"Rentab_Neg_semana",	"Rentab_Neg_mes",	"Rentab_Neg_YtD",	"Rentab_Neg_Semestre",	"Rentab_Neg_1Y", "Select"
+
+]]
+
+dfSIF2023['Nombre_Entidad_Corto'] = dfSIF2023['Nombre_Entidad_Corto'].str.upper()
+dfSIF2023['Nombre_Fondo_Corto'] = dfSIF2023['Nombre_Fondo_Corto'].str.upper()
+dfSIF2023 = dfSIF2023.sort_values(by="Nombre_Fondo_Corto", ascending=True)
+
+
+
 
 dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
 
-# dfSIF2023NoDupl, dictSelectTodos, dictTrueSelectTodos = crearDictSelect(
-#     dfSIF2023NoDupl, "Nombre_Fondo_Corto", filter_dataframeSIF)
+dfSIF2023Select, dictSelectTodos, dictTrueSelectTodos = crearDictSelect(
+    dfSIF2023NoDupl, "Nombre_Fondo_Corto")
+
+dfTodosVacio = pd.DataFrame()
 
 
-# dfTodosVacio = pd.DataFrame()
-
-
-
-# for fondo in dictTrueSelectTodos:
+for fondo in dictTrueSelectTodos:
     
-#     dfTodos = dfSIF2023.loc[dfSIF2023["Nombre_Fondo_Corto"]== fondo]
-#     dfTodosVacio = pd.concat([dfTodosVacio, dfTodos], axis=0)
+    dfTodos = dfSIF2023.loc[dfSIF2023["Nombre_Fondo_Corto"]== fondo]
+    dfTodosVacio = pd.concat([dfTodosVacio, dfTodos], axis=0)
+
+
+col1, col2, col3 = st.columns([2, 1, 0.1])
+
+if dfTodosVacio.empty:
+
+    with col1:
+        st.download_button(label='Generar Informe Todos Check',
+                        data=to_excel(dfSIF2023.drop(columns=['Select']), "All") ,
+                        file_name= 'SIFInformeCheck.xlsx'
+                        )
+
+else:
+    dfTodosVacio = dfTodosVacio.sort_values(by="Nombre_Fondo_Corto", ascending=True)
+
+    with col1:
+        st.download_button(label='Generar Informe Todos Check',
+                        data=to_excel(dfTodosVacio.drop(columns=['Select']), "All") ,
+                        file_name= 'SIFInformeCheck.xlsx'
+                        )
+
+
+
+
+
+# df_downl2023 =filter_dataframeSIF(dfSIF2023)
+
+
+# df_downl2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
+
+
+
+
+# st.dataframe(df_downl2023NoDupl[['Nombre_Entidad_Corto','Nombre_Fondo_Corto',
+#                                  "ASSET_CLASS"
+#                                 ]],  hide_index=True )
+
+
 
 
 
@@ -821,44 +904,13 @@ dfSIF2023NoDupl = dfSIF2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep=
 
 
 
-# col1, col2, col3 = st.columns([2, 1, 0.1])
 
 # with col1:
-#     st.download_button(label='Generar Informe Todos Check',
-#                        data=to_excel(dfTodosVacio) ,
-#                        file_name= 'SIFInformeCheck.xlsx'
+
+#     st.download_button(label='Generar Informe SIF',
+#                        data=to_excel(df_downl2023, "All") ,
+#                        file_name= 'SIFInforme.xlsx'
 #                        )
-
-
-
-df_downl2023 =filter_dataframeSIF(dfSIF2023)
-
-df_downl2023 = df_downl2023[["concatenar",	"Fecha corte",	"ASSET_CLASS",	"Nombre_Entidad_Corto",	"Nombre_Fondo_Corto",	"ID Participacion",	"Núm. unidades",	"Valor unidad para las operaciones del día t",	"Valor fondo al cierre del día t",	"Núm. Invers.",	"Comision_Admin",	"Rentab. dia",	"Rentab. mes",	"Rentab. sem",	"Rentab. Ultaño",	"Rentab_Ytd",	"Rentab_3Y",	"Rentab_5Y",	"RB_mensual",	"RB_semestral",	"RB_Ytd",	"RB_1Y",	"RB_3Y",	"RB_5Y",	"V_mensual",	"V_semestral",	"V_Ytd",	"V_1Y",	"V_3Y",	"V_5Y",	"Sharpe_1Y",	"Sharpe_3Y",	"Sharpe_5Y",	"Rentab_Neg_semana",	"Rentab_Neg_mes",	"Rentab_Neg_YtD",	"Rentab_Neg_Semestre",	"Rentab_Neg_1Y"
-
-]]
-
-df_downl2023NoDupl = df_downl2023.drop_duplicates(subset=["Nombre_Fondo_Corto"], keep='first')
-
-
-
-
-st.dataframe(df_downl2023NoDupl[['Nombre_Entidad_Corto','Nombre_Fondo_Corto',
-                                 "ASSET_CLASS"
-                                ]],  hide_index=True )
-
-
-
-
-
-col1, col2, col3 = st.columns(3)
-
-
-with col1:
-
-    st.download_button(label='Generar Informe SIF',
-                       data=to_excel(df_downl2023) ,
-                       file_name= 'SIFInforme.xlsx'
-                       )
 
 
 # def load_data(sheets_url):
@@ -871,9 +923,9 @@ with col1:
 # for row in df.itertuples():
 #     st.write(f"{row.name} has a :{row.pet}:")
 
-@st.cache_data(ttl=3600)
-def load_data(url):
-    return  pd.read_csv(url, dtype=str).fillna("")
+# @st.cache_data(ttl=3600)
+# def load_data(url):
+#     return  pd.read_csv(url, dtype=str).fillna("")
 
 
 
@@ -883,19 +935,17 @@ def load_data(url):
 # url = f"<https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}>"
 # df = load_data(url)
 
-
-# # Show the dataframe (we'll delete this later)
-# st.write(df)
-
 st.text(" ")
 st.text(" ")
+ 
+
 st.text(" ")
 st.text(" ")
 
 st.info(
     """
-    ㅤ¿Inquietudes?
-    ㅤ[Dejanos saber a través de este link!](https://www.google.com/forms/about/)
+    ㅤㅤㅤㅤㅤㅤㅤㅤㅤ¿Inquietudes? ㅤ [Dejanos saber a través de este link!](https://forms.gle/7oGTStkjUXNeztLV9)
     """,
-    icon="👾",
+    icon="👀",
 )
+# st.write(df)
