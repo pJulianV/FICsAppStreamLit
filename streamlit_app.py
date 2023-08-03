@@ -324,6 +324,11 @@ st.success(
 """,
 icon="💵",)
 
+st.success(
+"""
+   ㅤㅤㅤㅤㅤㅤLa duración solo está disponible para la muestra de fondos sugeridos
+""",
+icon="💵",)
 
 
 for i in range(df.shape[0]):
