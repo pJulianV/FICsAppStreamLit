@@ -471,7 +471,7 @@ st.text(" ")
 empty_left, contents, empty_right = st.columns([0.65, 3, 0.1])
 
 with contents:
-    st.subheader("Filtre y seleccione los que usted desee 🔍")
+    st.subheader("Filtre y seleccione de la base de fondos sugeridos 🔍")
 
 empty_left, contents, empty_right = st.columns([1.75, 3, 0.1])
 
