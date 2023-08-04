@@ -445,19 +445,6 @@ excelSIF2023 = "Informe Completo"
 
 
 
-
-
-
-
-
-    
-
-
-
-
-
-
-
 dfdownlSIF =filter_dataframeSIF(dfSIF)
 
 
