@@ -138,7 +138,7 @@ dfSIF = pd.read_excel(excel_file,
                    )
 
 
-dfSIF["Fecha corte"] = "30/06/2023"
+# dfSIF["Fecha corte"] = "30/06/2023"
 
 
 filtered_df = dfSIF.dropna()
