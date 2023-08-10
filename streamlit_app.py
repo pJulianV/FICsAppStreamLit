@@ -108,10 +108,10 @@ customized_button = st.markdown("""
 
 
 
-empty_left, contents, empty_right = st.columns([0.5, 3, 0.5])
+empty_left, contents, empty_right = st.columns([1, 3, 0.5])
 
 with contents:
-    st.header("Reporte de competencia industria ㅤㅤㅤㅤ local de fondos")
+    st.header("Reporte de competencia industria local de fondos")
 
 
 empty_left, contents, empty_right = st.columns([1.9, 3, 0.1])
@@ -487,7 +487,7 @@ st.text(" ")
 
 st.info(
     """
-    ㅤ¿Inquietudes?ㅤ [Escribenos Aqui!](mailto:correodeseado@dominio.com)
+    ㅤSi presenta alguna inquietud al respecto, puede escribirnos al correo: Gerencia_Desarrollo_Negocio_AM@bancolombia.com.co
     """,
     icon="👀",
 )
