@@ -488,7 +488,7 @@ st.text(" ")
 st.info(
     """
     ㅤㅤㅤㅤㅤSi presenta alguna inquietud al respecto, puede escribirnos al correo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ 
-    [Gerencia_Desarrollo_Negocio_AM@bancolombia.com.co]
+    Gerencia_Desarrollo_Negocio_AM@bancolombia.com.co
     """,
     icon="👀",
 )
