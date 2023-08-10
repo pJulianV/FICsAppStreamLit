@@ -472,7 +472,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
 
     st.download_button(label='Generar Informe SIF',
-                       data=to_excel(df_downl, "All") ,
+                       data=to_excel(dfdownlSIF, "All") ,
                        file_name= 'SIFInforme.xlsx'
                        )
 
