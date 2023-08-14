@@ -1,7 +1,6 @@
 # ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
 # cd OneDrive - Grupo Bancolombia\Workspace\FicsAppStreamLit\
-# cd Workspace\FIC StreamLit
 # streamlit run streamlit_app.py
 
 # pip install -r requirements.txt
@@ -108,16 +107,16 @@ customized_button = st.markdown("""
 
 
 
-empty_left, contents, empty_right = st.columns([0.5, 3, 0.5])
+empty_left, contents, empty_right = st.columns([1, 3, 0.5])
 
 with contents:
-    st.header("Reporte de competencia industria ㅤㅤㅤㅤ local de fondos")
+    st.header("Reporte de competencia industria local de fondos")
 
 
 empty_left, contents, empty_right = st.columns([1.9, 3, 0.1])
 
 with contents:
-    st.markdown("Fecha Corte: 06 30 2023")
+    st.markdown("Fecha Corte: 07 31 2023")
 
 
 st.text(" ")
@@ -127,18 +126,31 @@ img = Image.open("img/investment3.jpeg")
 st.image(img, use_column_width=True)
 
 
-excel_file = "MODELO Rutas Julian.xlsb"
+excel_file = "Informe de competencia FICs 31072023 Todos los fondos.xlsx"
 sheet_name = "Informe Completo"
 
 
 dfSIF = pd.read_excel(excel_file,
                    sheet_name= sheet_name,
                    header=0,
-                   usecols = "A:AH",
+                   usecols = "A:AI",
                    )
 
 
-dfSIF["Fecha corte"] = "30/06/2023"
+dfSIF["Fecha corte"] = "31/07/2023"
+
+
+colsACambiar = ["Valor fondo", "Comisión",	"Duración",	"RN.mensual",	"RN.semestral",	"RN.Ytd", "RN. 1Y",  "RN. 3Y", 	"RN. 5Y",	"RB.mensual",	"RB.semestral",	"RB.Ytd",	"RB. 1Y",	"RB. 3Y",	"RB. 5Y",	"V.mensual",	"V.semestral",	"V.Ytd",	"V. 1Y",	"V. 3Y",	"V. 5Y"]
+
+
+for col in colsACambiar:
+    
+    dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
+        
+# dfSIF['Valor fondo'] =  dfSIF['Valor fondo'].astype(float)
+
+dfSIF.replace({"nan": "ND"})
+
 
 
 filtered_df = dfSIF.dropna()
@@ -253,16 +265,43 @@ st.text(" ")
 @st.cache_data(ttl=3600)
 
 def to_excel(df, numeroFondos):
+    # output = BytesIO()
+    # writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    # df.to_excel(writer, index=False, sheet_name='Sheet1')
+    # workbook = writer.book
+    # worksheet = writer.sheets['Sheet1']
+    # format1 = workbook.add_format({'num_format': '0.00'})
+    # worksheet.set_column('A:A', None)
+    # writer.close()
+    # processed_data = output.getvalue()
+    # return processed_data
+
+
+    wb = load_workbook('template.xlsx') 
+    ws = wb.active
+
+    rows = dataframe_to_rows(df)
+
+    for r_idx, row in enumerate(rows, 1):
+        for c_idx, value in enumerate(row, 1):
+             ws.cell(row=r_idx, column=c_idx, value=value)
+
+
+ 
+
+    ws.delete_cols(1)
+    ws.delete_rows(2)
+
+
     output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, index=False, sheet_name='Sheet1')
-    workbook = writer.book
-    worksheet = writer.sheets['Sheet1']
-    format1 = workbook.add_format({'num_format': '0.00'})
-    worksheet.set_column('A:A', None)
-    writer.close()
-    processed_data = output.getvalue()
-    return processed_data
+    wb.save(output)
+    # workbook = Wb()
+
+    # with NamedTemporaryFile() as tmp:
+    #     workbook.save(tmp.name)
+
+    data = output.getvalue()
+    return data
 
 
 
@@ -313,15 +352,15 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
     # Try to convert datetimes into a standard format (datetime, no timezone)
-    for col in df.columns:
-        if is_object_dtype(df[col]):
-            try:
-                df[col] = pd.to_datetime(df[col])
-            except Exception:
-                pass
+#    for col in df.columns:
+#        if is_object_dtype(df[col]):
+#            try:
+#                df[col] = pd.to_datetime(df[col])
+#            except Exception:
+#                pass
 
-        if is_datetime64_any_dtype(df[col]):
-            df[col] = df[col].dt.tz_localize(None)
+#        if is_datetime64_any_dtype(df[col]):
+#            df[col] = df[col].dt.tz_localize(None)
 
     modification_container = st.container()
 
@@ -387,15 +426,15 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
     # Try to convert datetimes into a standard format (datetime, no timezone)
-    for col in df.columns:
-        if is_object_dtype(df[col]):
-            try:
-                df[col] = pd.to_datetime(df[col])
-            except Exception:
-                pass
-
-        if is_datetime64_any_dtype(df[col]):
-            df[col] = df[col].dt.tz_localize(None)
+#    for col in df.columns:
+#        if is_object_dtype(df[col]):
+#            try:
+#                df[col] = pd.to_datetime(df[col])
+#            except Exception:
+#                pass
+#
+#        if is_datetime64_any_dtype(df[col]):
+#            df[col] = df[col].dt.tz_localize(None)
 
     modification_container = st.container()
 
@@ -472,7 +511,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
 
     st.download_button(label='Generar Informe SIF',
-                       data=to_excel(df_downl, "All") ,
+                       data=to_excel(dfdownlSIF, "All") ,
                        file_name= 'SIFInforme.xlsx'
                        )
 
@@ -487,7 +526,8 @@ st.text(" ")
 
 st.info(
     """
-    ㅤ¿Inquietudes?ㅤ [Escribenos Aqui!](mailto:correodeseado@dominio.com)
+    ㅤㅤㅤㅤㅤSi presenta alguna inquietud al respecto, puede escribirnos al correo:ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤ 
+    Gerencia_Desarrollo_Negocio_AM@bancolombia.com.co
     """,
     icon="👀",
 )
