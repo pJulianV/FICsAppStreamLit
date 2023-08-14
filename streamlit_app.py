@@ -145,7 +145,7 @@ colsACambiar = ["Valor fondo", "Comisión",	"Duración",	"RN.mensual",	"RN.semes
 
 # dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
         
-dfSIF['Valor fondo'] = dfSIF['Valor fondo'].map("{:,.2f}".format)
+# dfSIF['Valor fondo'] = dfSIF['Valor fondo'].map("{:,.2f}".format)
 
 dfSIF.replace({"nan": "ND"})
 
