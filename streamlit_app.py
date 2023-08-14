@@ -143,11 +143,9 @@ dfSIF["Fecha corte"] = "31/07/2023"
 colsACambiar = ["Valor fondo", "Comisión",	"Duración",	"RN.mensual",	"RN.semestral",	"RN.Ytd", "RN. 1Y",  "RN. 3Y", 	"RN. 5Y",	"RB.mensual",	"RB.semestral",	"RB.Ytd",	"RB. 1Y",	"RB. 3Y",	"RB. 5Y",	"V.mensual",	"V.semestral",	"V.Ytd",	"V. 1Y",	"V. 3Y",	"V. 5Y"]
 
 
-for col in colsACambiar:
-    
-    dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
+# dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
         
-# dfSIF['Valor fondo'] =  dfSIF['Valor fondo'].astype(float)
+dfSIF['Valor fondo'] = dfSIF['Valor fondo'].map("{:,.2f}".format)
 
 dfSIF.replace({"nan": "ND"})
 
