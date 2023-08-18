@@ -152,7 +152,7 @@ def tryPass( column):
     
 
 dfSIF['Valor fondo'] = tryPass('Valor fondo')
-# dfSIF['Comisión'] = dfSIF['Comisión'].map("{:,.2f}".format)
+dfSIF['Comisión'] = tryPass('Comisión')
 # dfSIF['Duración'] = dfSIF['Duración'].map("{:,.2f}".format)
 
 # dfSIF['RN.mensual'] = dfSIF['RN.mensual'].map("{:,.2f}".format)
