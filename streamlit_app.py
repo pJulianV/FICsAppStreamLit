@@ -144,31 +144,37 @@ colsACambiar = ["Valor fondo", "Comisión",	"Duración",	"RN.mensual",	"RN.semes
 
 
 # dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
-        
-dfSIF['Valor fondo'] = dfSIF['Valor fondo'].map("{:,.2f}".format)
-dfSIF['Comisión'] = dfSIF['Comisión'].map("{:,.2f}".format)
-dfSIF['Duración'] = dfSIF['Duración'].map("{:,.2f}".format)
+def tryPass( column):
+    try:
+        return dfSIF[column].map("{:,.2f}".format)
+    except:
+        return column
+    
 
-dfSIF['RN.mensual'] = dfSIF['RN.mensual'].map("{:,.2f}".format)
-dfSIF['RN.semestral'] = dfSIF['RN.semestral'].map("{:,.2f}".format)
-dfSIF['RN.Ytd'] = dfSIF['RN.Ytd'].map("{:,.2f}".format)
-dfSIF['RN. 1Y'] = dfSIF['RN. 1Y'].map("{:,.2f}".format)
-dfSIF['RN. 3Y'] = dfSIF['RN. 3Y'].map("{:,.2f}".format)
-dfSIF['RN. 5Y'] = dfSIF['RN. 5Y'].map("{:,.2f}".format)
+dfSIF['Valor fondo'] = tryPass('Valor fondo')
+# dfSIF['Comisión'] = dfSIF['Comisión'].map("{:,.2f}".format)
+# dfSIF['Duración'] = dfSIF['Duración'].map("{:,.2f}".format)
 
-dfSIF['RB.mensual'] = dfSIF['RB.mensual'].map("{:,.2f}".format)
-dfSIF['RB.semestral'] = dfSIF['RB.semestral'].map("{:,.2f}".format)
-dfSIF['RB.Ytd'] = dfSIF['RB.Ytd'].map("{:,.2f}".format)
-dfSIF['RB. 1Y'] = dfSIF['RB. 1Y'].map("{:,.2f}".format)
-dfSIF['RB. 3Y'] = dfSIF['RB. 3Y'].map("{:,.2f}".format)
-dfSIF['RB. 5Y'] = dfSIF['RB. 5Y'].map("{:,.2f}".format)
+# dfSIF['RN.mensual'] = dfSIF['RN.mensual'].map("{:,.2f}".format)
+# dfSIF['RN.semestral'] = dfSIF['RN.semestral'].map("{:,.2f}".format)
+# dfSIF['RN.Ytd'] = dfSIF['RN.Ytd'].map("{:,.2f}".format)
+# dfSIF['RN. 1Y'] = dfSIF['RN. 1Y'].map("{:,.2f}".format)
+# dfSIF['RN. 3Y'] = dfSIF['RN. 3Y'].map("{:,.2f}".format)
+# dfSIF['RN. 5Y'] = dfSIF['RN. 5Y'].map("{:,.2f}".format)
 
-dfSIF['V.mensual'] = dfSIF['V.mensual'].map("{:,.2f}".format)
-dfSIF['V.semestral'] = dfSIF['V.semestral'].map("{:,.2f}".format)
-dfSIF['V.Ytd'] = dfSIF['V.Ytd'].map("{:,.2f}".format)
-dfSIF['V. 1Y'] = dfSIF['V. 1Y'].map("{:,.2f}".format)
-dfSIF['V. 3Y'] = dfSIF['V. 3Y'].map("{:,.2f}".format)
-dfSIF['V. 5Y'] = dfSIF['V. 5Y'].map("{:,.2f}".format)
+# dfSIF['RB.mensual'] = dfSIF['RB.mensual'].map("{:,.2f}".format)
+# dfSIF['RB.semestral'] = dfSIF['RB.semestral'].map("{:,.2f}".format)
+# dfSIF['RB.Ytd'] = dfSIF['RB.Ytd'].map("{:,.2f}".format)
+# dfSIF['RB. 1Y'] = dfSIF['RB. 1Y'].map("{:,.2f}".format)
+# dfSIF['RB. 3Y'] = dfSIF['RB. 3Y'].map("{:,.2f}".format)
+# dfSIF['RB. 5Y'] = dfSIF['RB. 5Y'].map("{:,.2f}".format)
+
+# dfSIF['V.mensual'] = dfSIF['V.mensual'].map("{:,.2f}".format)
+# dfSIF['V.semestral'] = dfSIF['V.semestral'].map("{:,.2f}".format)
+# dfSIF['V.Ytd'] = dfSIF['V.Ytd'].map("{:,.2f}".format)
+# dfSIF['V. 1Y'] = dfSIF['V. 1Y'].map("{:,.2f}".format)
+# dfSIF['V. 3Y'] = dfSIF['V. 3Y'].map("{:,.2f}".format)
+# dfSIF['V. 5Y'] = dfSIF['V. 5Y'].map("{:,.2f}".format)
 
 
 dfSIF.replace({"nan": "ND"})
