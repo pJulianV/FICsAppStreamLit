@@ -148,9 +148,12 @@ def tryPass( column):
     try:
         return dfSIF[column].map("{:,.2f}".format)
     except:
-        print(column)
-        return dfSIF[column]
-    
+        try:
+            return dfSIF[column].map("{:.2f}".format)
+        except:
+            print(column)
+            return dfSIF[column]
+        
 
 dfSIF['Valor fondo'] = tryPass('Valor fondo')
 dfSIF['Comisión'] = tryPass('Comisión')
