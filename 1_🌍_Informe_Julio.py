@@ -62,8 +62,6 @@ st.set_page_config(
 
 
 
-st.sidebar.success("Seleccione una fecha arriba.")
-
 
 hide_github_icon = """
 #GithubIcon {

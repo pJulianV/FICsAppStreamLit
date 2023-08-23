@@ -40,7 +40,7 @@ from openpyxl.styles import Font
 
 import asyncio
 
-import altair as alt
+
 
 from pandas.api.types import (
     is_categorical_dtype,
@@ -59,11 +59,6 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 
 )
-
-
-
-st.sidebar.success("Seleccione una fecha arriba.")
-
 
 hide_github_icon = """
 #GithubIcon {
@@ -145,12 +140,51 @@ dfSIF = pd.read_excel(excel_file,
 dfSIF["Fecha corte"] = "31/07/2023"
 
 
-colsACambiar = ["Valor fondo", "Comisión",	"Duración",	"RN.mensual",	"RN.semestral",	"RN.Ytd", "RN. 1Y",  "RN. 3Y", 	"RN. 5Y",	"RB.mensual",	"RB.semestral",	"RB.Ytd",	"RB. 1Y",	"RB. 3Y",	"RB. 5Y",	"V.mensual",	"V.semestral",	"V.Ytd",	"V. 1Y",	"V. 3Y",	"V. 5Y"]
+colsACambiar = ["Valor fondo", 
+                "Comisión",	
+                "Duración",	
+                "RN.mensual",	
+                "RN.semestral",	
+                "RN.Ytd", 
+                "RN. 1Y",  
+                "RN. 3Y", 	
+                "RN. 5Y",	
+                "RB.mensual",	
+                "RB.semestral",	
+                "RB.Ytd",	
+                "RB. 1Y",	
+                "RB. 3Y",	
+                "RB. 5Y",	
+                "V.mensual",	
+                "V.semestral",	
+                "V.Ytd",	
+                "V. 1Y",	
+                "V. 3Y",	
+                "V. 5Y"]
 
 
-# dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
-        
-dfSIF['Valor fondo'] = dfSIF['Valor fondo'].map("{:,.2f}".format)
+dfSIF['Valor fondo'] =  dfSIF['Valor fondo'].map("{:,.2f}".format)
+dfSIF['Comisión'] =  dfSIF['Comisión'].map("{:,.2f}".format)
+dfSIF['Duración'] =  dfSIF['Duración'].map("{:,.2f}".format)
+dfSIF['RN.mensual'] =  dfSIF['RN.mensual'].map("{:,.2f}".format)
+dfSIF['RN.semestral'] =  dfSIF['RN.semestral'].map("{:,.2f}".format)
+dfSIF['RN.Ytd'] =  dfSIF['RN.Ytd'].map("{:,.2f}".format)
+dfSIF['RN. 1Y'] =  dfSIF['RN. 1Y'].map("{:,.2f}".format)
+dfSIF['RN. 3Y'] =  dfSIF['RN. 3Y'].map("{:,.2f}".format)
+dfSIF['RN. 5Y'] =  dfSIF['RN. 5Y'].map("{:,.2f}".format)
+dfSIF['RB.mensual'] =  dfSIF['RB.mensual'].map("{:,.2f}".format)
+dfSIF['RB.semestral'] =  dfSIF['RB.semestral'].map("{:,.2f}".format)
+dfSIF['RB.Ytd'] =  dfSIF['RB.Ytd'].map("{:,.2f}".format)
+dfSIF['RB. 1Y'] =  dfSIF['RB. 1Y'].map("{:,.2f}".format)
+dfSIF['RB. 3Y'] =  dfSIF['RB. 3Y'].map("{:,.2f}".format)
+dfSIF['RB. 5Y'] =  dfSIF['RB. 5Y'].map("{:,.2f}".format)
+dfSIF['V.mensual'] =  dfSIF['V.mensual'].map("{:,.2f}".format)
+dfSIF['V.semestral'] =  dfSIF['V.semestral'].map("{:,.2f}".format)
+dfSIF['V.Ytd'] =  dfSIF['V.Ytd'].map("{:,.2f}".format)
+dfSIF['V. 1Y'] =  dfSIF['V. 1Y'].map("{:,.2f}".format)
+dfSIF['V. 3Y'] =  dfSIF['V. 3Y'].map("{:,.2f}".format)
+dfSIF['V. 5Y'] =  dfSIF['V. 5Y'].map("{:,.2f}".format)
+
 
 dfSIF.replace({"nan": "ND"})
 
@@ -311,7 +345,6 @@ def to_excel(df, numeroFondos):
 col1, col2, col3 = st.columns([1.20, 2, 0.1])
 
 
-
 with col2:
     st.download_button(label='Generar Informe Sugeridos',
                        data=to_excel(filtered_df, "70") ,
@@ -353,7 +386,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     if not modify:
         return df
-    
+
     df = df.copy()
     # Try to convert datetimes into a standard format (datetime, no timezone)
 #    for col in df.columns:
@@ -391,8 +424,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
             df = df[df[column].isin(user_cat_input)]
 
-    
-    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
 
     return df
 
@@ -407,6 +438,7 @@ st.dataframe(df_downl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
 
 
 col1, col2, col3 = st.columns(3)
+
 
 
 with col1:
@@ -463,7 +495,7 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
             df = df[df[column].isin(user_cat_input)]
 
-    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
+
     return df
 
 st.text(" ")
@@ -536,9 +568,3 @@ st.info(
     """,
     icon="👀",
 )
-
-grafica = alt.Chart(dfdownlSIFNoDupl).mark_circle().encode(x="RN.mensual", y = "V.mensual"
-                                                        #    , size = "Valor fondo"
-                                                           )
-
-st.altair_chart(grafica, use_container_width= True)
