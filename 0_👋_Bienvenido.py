@@ -33,7 +33,7 @@ def run():
         - Selecciona la fecha que desees
         - Usa los filtros para seleccionar los fondos de la base de datos
         - Los fondos filtrados seran los descargados
-        ### ¿Tienes una dudas o sugerencias?
+        ### ¿Tienes dudas o sugerencias?
         Escribenos al correo: 
     """
     )
