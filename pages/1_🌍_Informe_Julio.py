@@ -1,8 +1,7 @@
-
 # ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
 # cd OneDrive - Grupo Bancolombia\Workspace\FicsAppStreamLit\
-# streamlit run streamlit_appJunio.py
+# streamlit run streamlit_app.py
 
 # pip install -r requirements.txt
 
@@ -41,7 +40,7 @@ from openpyxl.styles import Font
 
 import asyncio
 
-
+import altair as alt
 
 from pandas.api.types import (
     is_categorical_dtype,
@@ -60,6 +59,9 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 
 )
+
+
+
 
 hide_github_icon = """
 #GithubIcon {
@@ -117,7 +119,7 @@ with contents:
 empty_left, contents, empty_right = st.columns([1.9, 3, 0.1])
 
 with contents:
-    st.markdown("Fecha Corte: 06 30 2023")
+    st.markdown("Fecha Corte: 07 31 2023")
 
 
 st.text(" ")
@@ -127,7 +129,7 @@ img = Image.open("img/investment3.jpeg")
 st.image(img, use_column_width=True)
 
 
-excel_file = "Informe de competencia FICs 30062023 Todos los fondos.xlsx"
+excel_file = "Informe de competencia FICs 31072023 Todos los fondos.xlsx"
 sheet_name = "Informe Completo"
 
 
@@ -138,12 +140,15 @@ dfSIF = pd.read_excel(excel_file,
                    )
 
 
-dfSIF["Fecha corte"] = "30/06/2023"
+dfSIF["Fecha corte"] = "31/07/2023"
 
 
+colsACambiar = ["Valor fondo", "Comisión",	"Duración",	"RN.mensual",	"RN.semestral",	"RN.Ytd", "RN. 1Y",  "RN. 3Y", 	"RN. 5Y",	"RB.mensual",	"RB.semestral",	"RB.Ytd",	"RB. 1Y",	"RB. 3Y",	"RB. 5Y",	"V.mensual",	"V.semestral",	"V.Ytd",	"V. 1Y",	"V. 3Y",	"V. 5Y"]
 
+
+# dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
         
-dfSIF['Valor fondo'] =  dfSIF['Valor fondo'].astype(float)
+dfSIF['Valor fondo'] = dfSIF['Valor fondo'].map("{:,.2f}".format)
 
 dfSIF.replace({"nan": "ND"})
 
@@ -304,6 +309,7 @@ def to_excel(df, numeroFondos):
 col1, col2, col3 = st.columns([1.20, 2, 0.1])
 
 
+
 with col2:
     st.download_button(label='Generar Informe Sugeridos',
                        data=to_excel(filtered_df, "70") ,
@@ -345,7 +351,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     if not modify:
         return df
-
+    
     df = df.copy()
     # Try to convert datetimes into a standard format (datetime, no timezone)
 #    for col in df.columns:
@@ -383,6 +389,8 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
             df = df[df[column].isin(user_cat_input)]
 
+    
+    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
 
     return df
 
@@ -397,7 +405,6 @@ st.dataframe(df_downl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
 
 
 col1, col2, col3 = st.columns(3)
-
 
 
 with col1:
@@ -454,7 +461,7 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
             df = df[df[column].isin(user_cat_input)]
 
-
+    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
     return df
 
 st.text(" ")
@@ -528,8 +535,8 @@ st.info(
     icon="👀",
 )
 
+grafica = alt.Chart(dfdownlSIFNoDupl).mark_circle().encode(x="RN.mensual", y = "V.mensual"
+                                                        #    , size = "Valor fondo"
+                                                           )
 
-
-
-st.line_chart(dfdownlSIF, y = "Valor fondo")
-st.line_chart(df_downl, y = "Valor fondo")
+st.altair_chart(grafica, use_container_width= True)

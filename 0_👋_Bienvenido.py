@@ -26,8 +26,6 @@ def run():
 
     st.write("# ¡Bienvenid@ a nuestra App de Fondos de Inversión! 👋")
 
-    # st.sidebar.success("Select a demo above.")
-
     st.markdown(
         """
         Nuestra aplicación web está diseñada para ayudarte a explorar y analizar diversas opciones de fondos de inversión. 👈 Selecciona un filtro en la barra lateral para ver ejemplos de cómo puedes utilizar nuestra aplicación y encontrar los fondos que se ajusten a tus necesidades.
@@ -35,7 +33,7 @@ def run():
         - Selecciona la fecha que desees
         - Usa los filtros para seleccionar los fondos de la base de datos
         - Los fondos filtrados seran los descargados
-        ### ¿Tienes una dudas o sugerencias?
+        ### ¿Tienes dudas o sugerencias?
         Escribenos al correo: 
     """
     )
