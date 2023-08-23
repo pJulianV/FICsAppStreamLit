@@ -26,7 +26,7 @@ def run():
 
     st.write("# ¡Bienvenid@ a nuestra App de Fondos de Inversión! 👋")
 
-    # st.sidebar.success("Select a demo above.")
+    st.sidebar.success("Select a demo above.")
 
     st.markdown(
         """
