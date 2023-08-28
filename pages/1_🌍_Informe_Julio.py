@@ -40,7 +40,9 @@ from openpyxl.styles import Font
 
 import asyncio
 
-import altair as alt
+import plotly.express as px
+import streamlit as st
+
 
 from pandas.api.types import (
     is_categorical_dtype,
@@ -146,11 +148,7 @@ dfSIF["Fecha corte"] = "31/07/2023"
 colsACambiar = ["Valor fondo", "Comisión",	"Duración",	"RN.mensual",	"RN.semestral",	"RN.Ytd", "RN. 1Y",  "RN. 3Y", 	"RN. 5Y",	"RB.mensual",	"RB.semestral",	"RB.Ytd",	"RB. 1Y",	"RB. 3Y",	"RB. 5Y",	"V.mensual",	"V.semestral",	"V.Ytd",	"V. 1Y",	"V. 3Y",	"V. 5Y"]
 
 
-# dfSIF[col] =  dfSIF[col].map("{:,.2f}".format)
-        
-dfSIF['Valor fondo'] = dfSIF['Valor fondo'].map("{:,.2f}".format)
 
-dfSIF.replace({"nan": "ND"})
 
 
 
@@ -390,8 +388,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             df = df[df[column].isin(user_cat_input)]
 
     
-    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
-
     return df
 
 
@@ -399,13 +395,36 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 df_downl =filter_dataframe(filtered_df)
 
 
-st.dataframe(df_downl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
+tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Lineas", "Grafico Dispersion"])
+
+with tab1:
+    st.dataframe(df_downl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
                                   "Asset Class"
                                 ]],  hide_index=True )
+
+with tab2:
+    st.line_chart(df_downl,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
+
+   
+with tab3:
+    
+    fig = px.scatter(
+        df_downl,
+        x="RN.mensual",
+        y="V.mensual",
+        size="Valor fondo",
+        color="NOMBRE CORTO FONDO",
+        # hover_name="country",
+        # log_x=True,
+        size_max=150,
+    )
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 
 col1, col2, col3 = st.columns(3)
 
+      
+df_downl['Valor fondo'] = df_downl['Valor fondo'].map("{:,.2f}".format)
 
 with col1:
     st.download_button(label='Generar Informe',
@@ -461,7 +480,6 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
             df = df[df[column].isin(user_cat_input)]
 
-    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
     return df
 
 st.text(" ")
@@ -493,23 +511,42 @@ excelSIF2023 = "Informe Completo"
 dfdownlSIF =filter_dataframeSIF(dfSIF)
 
 
-dfdownlSIFNoDupl = dfdownlSIF.drop_duplicates(subset=["NOMBRE CORTO FONDO"], keep='first')
+# dfdownlSIFNoDupl = dfdownlSIF.drop_duplicates(subset=["NOMBRE CORTO FONDO"], keep='first')
 
 
 
-st.dataframe(dfdownlSIFNoDupl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
+tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Lineas", "Grafico Dispersion"])
+
+with tab1:
+    st.dataframe(dfdownlSIF[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
                                   "Asset Class"
                                 ]],  hide_index=True )
 
 
+with tab2:
+    st.line_chart(dfdownlSIF,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
 
+   
+with tab3:
+    
+    fig = px.scatter(
+        dfdownlSIF,
+        x="RN.mensual",
+        y="V.mensual",
+        size="Valor fondo",
+        color="NOMBRE CORTO FONDO",
+        # hover_name="country",
+        # log_x=True,
+        size_max=150,
+    )
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+
+        
+dfdownlSIF['Valor fondo'] = dfdownlSIF['Valor fondo'].map("{:,.2f}".format)
 
 
 col1, col2, col3 = st.columns(3)
-
-
-
-
 
 with col1:
 
@@ -534,9 +571,3 @@ st.info(
     """,
     icon="👀",
 )
-
-grafica = alt.Chart(dfdownlSIFNoDupl).mark_circle().encode(x="RN.mensual", y = "V.mensual"
-                                                        #    , size = "Valor fondo"
-                                                           )
-
-st.altair_chart(grafica, use_container_width= True)
