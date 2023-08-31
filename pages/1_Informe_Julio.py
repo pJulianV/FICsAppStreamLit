@@ -554,6 +554,7 @@ dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
 
 
 dfdownlSIFTemp['Valor fondo millones']
+dfdownlSIFTemp['Valor fondo']
 
 with tab1:
     st.dataframe(dfdownlSIFTemp[['Nombre administradora', 'Nombre fondo',
