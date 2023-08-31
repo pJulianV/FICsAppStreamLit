@@ -415,7 +415,7 @@ with tab1:
 
 with tab2:
     st.bar_chart(df_downlTemp, x="Nombre fondo",
-                 y='Valor fondo', height=450)
+                 y='Valor fondo millones', height=450)
 
    
 with tab3:
