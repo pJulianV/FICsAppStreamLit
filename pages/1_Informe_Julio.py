@@ -1,10 +1,10 @@
-# ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
+
 
 # cd OneDrive - Grupo Bancolombia\Workspace\FicsAppStreamLit\
 # streamlit run streamlit_app.py
 
 # pip install -r requirements.txt
-
+# ! Las dependencia, rutas y codigos que se usan en la terminal de anaconda
 
 # pip install    qgrid     -i https://artifactory.apps.bancolombia.com/api/pypi/python-org/simple --trusted-host artifactory.apps.bancolombia.com
 
@@ -395,59 +395,38 @@ df_downl =filter_dataframe(filtered_df)
 
 tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
 
+df_downlTemp = df_downl
+df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
+                             'RN.mensual': 'Rentabilidad neta mensual',
+                             'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                             'NOMBRE CORTO FONDO': 'Nombre fondo'},
+                    inplace=True, errors='raise')
+
 with tab1:
-    st.dataframe(df_downl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
-                                  "Asset Class"
+    st.dataframe(df_downlTemp[['Nombre administradora', 'Nombre fondo',
+                           "Nombre fondo"
                                 ]],  hide_index=True )
 
+
 with tab2:
-    st.bar_chart(df_downl,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
+    st.bar_chart(df_downlTemp, x="Nombre fondo",
+                 y='Valor fondo', height=450)
 
    
 with tab3:
-    
+
+
     fig = px.scatter(
-        df_downl,
-        x="RN.mensual",
-        y="V.mensual",
-        size="Valor fondo",
-        color="NOMBRE CORTO FONDO",
-        # hover_name="country",
+        df_downlTemp,
+        x="Rentabilidad neta mensual",
+        y="Volatilidad mensual",
+        size="Nombre administradora",
+        color="Nombre fondo",
+        hover_name="Valor fondo",
         # log_x=True,
         size_max=150,
     )
-    fig.update_layout(title=dict(font=dict(size=40)))
-    fig.update_layout(title_font_size=40)
-    fig.update_layout(
-        title={
-            'text': "Plot Title",
-            'y': 0.9,
-            'x': 0.9,
-            'xanchor': 'right',
-            'yanchor': 'top'})
-    fig.update_layout(
-        # title="Plot Title",
-        xaxis_title="Nombre Fondo",
-        yaxis_title="Valor Fondo",
-        legend_title="Legend Title",
-        font=dict(
-            family="Courier New, monospace",
-            size=18,
-            color="RebeccaPurple"
-        )
-    )
-    fig.update_layout(
-        title=dict(
-            text='<b>Life Expectancy - Our World in Data</b>',
-            x=0.5,
-            y=0.95,
-            font=dict(
-                family="Arial",
-                size=20,
-                color='#000000'
-            )
-        ))
-    fig.update_layout(font={'size': 30})
+    
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 
@@ -547,25 +526,33 @@ dfdownlSIF =filter_dataframeSIF(dfSIF)
 
 tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
 
+dfdownlSIFTemp = dfdownlSIF
+dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
+                             'RN.mensual': 'Rentabilidad neta mensual',
+                             'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                             'NOMBRE CORTO FONDO': 'Nombre fondo'},
+                    inplace=True, errors='raise')
+
 with tab1:
-    st.dataframe(dfdownlSIF[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
+    st.dataframe(dfdownlSIFTemp[['Nombre administradora', 'Nombre fondo',
                                   "Asset Class"
                                 ]],  hide_index=True )
 
 
 with tab2:
-    st.bar_chart(dfdownlSIF,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
+    st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",
+                 y='Valor fondo', height=450)
 
    
 with tab3:
     
     fig = px.scatter(
-        dfdownlSIF,
-        x="RN.mensual",
-        y="V.mensual",
-        size="Valor fondo",
-        color="NOMBRE CORTO FONDO",
-        # hover_name="country",
+        dfdownlSIFTemp,
+        x="Rentabilidad neta mensual",
+        y="Volatilidad mensual",
+        size="Nombre administradora",
+        color="Nombre fondo",
+        hover_name="Valor Fondo",
         # log_x=True,
         size_max=150,
     )

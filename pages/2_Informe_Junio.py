@@ -388,32 +388,39 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 df_downl =filter_dataframe(filtered_df)
 
-
 tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
 
+df_downlTemp = df_downl
+df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
+                             'RN.mensual': 'Rentabilidad neta mensual',
+                             'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                             'NOMBRE CORTO FONDO': 'Nombre fondo'},
+                    inplace=True, errors='raise')
+
 with tab1:
-    st.dataframe(df_downl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
-                                  "Asset Class"
-                                ]],  hide_index=True )
+    st.dataframe(df_downlTemp[['Nombre administradora', 'Nombre fondo',
+                               "Nombre fondo"
+                               ]],  hide_index=True)
 
 
 with tab2:
-    st.bar_chart(df_downl,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
-
+    st.bar_chart(df_downlTemp, x="Nombre fondo",
+                 y='Valor fondo', height=450)
 
 
 with tab3:
-        
+
     fig = px.scatter(
-        df_downl,
-        x="RN.mensual",
-        y="V.mensual",
-        size="Valor fondo",
-        color="NOMBRE CORTO FONDO",
-        # hover_name="country",
+        df_downlTemp,
+        x="Rentabilidad neta mensual",
+        y="Volatilidad mensual",
+        size="Nombre administradora",
+        color="Nombre fondo",
+        hover_name="Valor fondo",
         # log_x=True,
         size_max=150,
     )
+
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 col1, col2, col3 = st.columns(3)
@@ -510,33 +517,39 @@ dfdownlSIF =filter_dataframeSIF(dfSIF)
 # dfdownlSIFNoDupl = dfdownlSIF.drop_duplicates(subset=["NOMBRE CORTO FONDO"], keep='first')
 
 
-
 tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
 
+dfdownlSIFTemp = dfdownlSIF
+dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
+                               'RN.mensual': 'Rentabilidad neta mensual',
+                               'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                               'NOMBRE CORTO FONDO': 'Nombre fondo'},
+                      inplace=True, errors='raise')
+
 with tab1:
-    st.dataframe(dfdownlSIF[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
-                                  "Asset Class"
-                                ]],  hide_index=True )
+    st.dataframe(dfdownlSIFTemp[['Nombre administradora', 'Nombre fondo',
+                                 "Asset Class"
+                                 ]],  hide_index=True)
 
 
 with tab2:
-    st.bar_chart(dfdownlSIF,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
+    st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",
+                 y='Valor fondo', height=450)
 
 
 with tab3:
 
     fig = px.scatter(
-        dfdownlSIF,
-        x="RN.mensual",
-        y="V.mensual",
-        size="Valor fondo",
-        color="NOMBRE CORTO FONDO",
-        # hover_name="country",
+        dfdownlSIFTemp,
+        x="Rentabilidad neta mensual",
+        y="Volatilidad mensual",
+        size="Nombre administradora",
+        color="Nombre fondo",
+        hover_name="Valor Fondo",
         # log_x=True,
         size_max=150,
     )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
-
 
 
 col1, col2, col3 = st.columns(3)
