@@ -393,8 +393,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 df_downl =filter_dataframe(filtered_df)
 
 
-tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
-
+tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Grafico Columnas Fondo", "Grafico Dispersion Fondo", "Grafico Dispersion Entidad" ])
 df_downlTemp = df_downl
 df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                              'RN.mensual': 'Rentabilidad neta mensual',
@@ -429,6 +428,18 @@ with tab3:
     
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
+with tab4:
+    fig = px.scatter(
+        dfdownlSIFTemp,
+        x="Rentabilidad neta mensual",
+        y="Volatilidad mensual",
+        # size="Nombre administradora",
+        color="Nombre fondo",
+        hover_name="Valor fondo",
+        # log_x=True,
+        size_max=150,
+    )
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 col1, col2, col3 = st.columns(3)
 
@@ -524,14 +535,27 @@ dfdownlSIF =filter_dataframeSIF(dfSIF)
 
 
 
-tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
-
+tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Grafico Columnas Fondo", "Grafico Dispersion Fondo", "Grafico Dispersion Entidad" ])
 dfdownlSIFTemp = dfdownlSIF
 dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                              'RN.mensual': 'Rentabilidad neta mensual',
                              'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
                              'NOMBRE CORTO FONDO': 'Nombre fondo'},
                     inplace=True, errors='raise')
+
+
+mean_income = dfdownlSIFTemp['income'].mean()
+
+
+def convertirAMillones(x):
+    return x / 1000000
+
+
+dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
+    convertirAMillones)
+
+
+
 
 with tab1:
     st.dataframe(dfdownlSIFTemp[['Nombre administradora', 'Nombre fondo',
@@ -558,6 +582,22 @@ with tab3:
     )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
+
+dfdownlSIFTempEnt = dfdownlSIFTemp
+
+
+with tab4:
+    fig = px.scatter(
+        dfdownlSIFTemp,
+        x="Rentabilidad neta mensual",
+        y="Volatilidad mensual",
+        size="Nombre administradora",
+        color="Nombre fondo",
+        hover_name="Valor fondo",
+        # log_x=True,
+        size_max=150,
+    )
+    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
         
 dfdownlSIF['Valor fondo'] = dfdownlSIF['Valor fondo'].map("{:,.2f}".format)
