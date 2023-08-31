@@ -398,6 +398,7 @@ df_downlTemp = df_downl
 df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                              'RN.mensual': 'Rentabilidad neta mensual',
                              'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                               'TIPO DE PARTICIPACIÓN': 'Tipo participacion',
                              'NOMBRE CORTO FONDO': 'Nombre fondo'},
                     inplace=True, errors='raise')
 def convertirAMillones(x):
@@ -415,7 +416,7 @@ with tab1:
 
 with tab2:
     st.bar_chart(df_downlTemp, x="Nombre fondo",
-                 y='Valor fondo millones', height=450)
+                 y='Valor fondo millones', height=450, color = 'Tipo participacion')
 
    
 with tab3:
@@ -550,6 +551,7 @@ dfdownlSIFTemp = dfdownlSIF
 dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                              'RN.mensual': 'Rentabilidad neta mensual',
                              'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                               'TIPO DE PARTICIPACIÓN': 'Tipo participacion',
                              'NOMBRE CORTO FONDO': 'Nombre fondo'},
                     inplace=True, errors='raise')
 
@@ -568,7 +570,7 @@ with tab1:
 
 with tab2:
     st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",
-                 y='Valor fondo millones', height=450)
+                 y='Valor fondo millones', height=450, color = 'Tipo participacion')
 
    
 with tab3:

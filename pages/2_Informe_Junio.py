@@ -393,6 +393,7 @@ df_downlTemp = df_downl
 df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                              'RN.mensual': 'Rentabilidad neta mensual',
                              'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                               'TIPO DE PARTICIPACIÓN': 'Tipo participacion',
                              'NOMBRE CORTO FONDO': 'Nombre fondo'},
                     inplace=True, errors='raise')
 
@@ -412,7 +413,7 @@ with tab1:
 
 with tab2:
     st.bar_chart(df_downlTemp, x="Nombre fondo",
-                 y='Valor fondo millones', height=450)
+                 y='Valor fondo millones', height=450, color = 'Tipo participacion')
 
 
 with tab3:
@@ -538,9 +539,12 @@ dfdownlSIF =filter_dataframeSIF(dfSIF)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Grafico Columnas Fondo", "Grafico Dispersion Fondo", "Grafico Dispersion Entidad" ])
 dfdownlSIFTemp = dfdownlSIF
+
+
 dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                                'RN.mensual': 'Rentabilidad neta mensual',
                                'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
+                               'TIPO DE PARTICIPACIÓN': 'Tipo participacion',
                                'NOMBRE CORTO FONDO': 'Nombre fondo'},
                       inplace=True, errors='raise')
 
@@ -556,7 +560,7 @@ with tab1:
 
 with tab2: 
     st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",
-                 y='Valor fondo millones', height=450)
+                 y='Valor fondo millones', height=450, color = 'Tipo participacion')
 
 
 with tab3:
