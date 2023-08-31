@@ -427,7 +427,7 @@ with tab3:
         y="Volatilidad mensual",
         # size="Nombre administradora",
         color="Nombre fondo",
-        hover_name="Valor fondo",
+        hover_name="Nombre administradora",
         # log_x=True,
         size_max=150,
     )
@@ -579,7 +579,7 @@ with tab3:
         y="Volatilidad mensual",
         # # size="Nombre administradora",
         color="Nombre fondo",
-        hover_name="Valor fondo",
+        hover_name="Nombre administradora",
         # log_x=True,
         size_max=150,
     )
