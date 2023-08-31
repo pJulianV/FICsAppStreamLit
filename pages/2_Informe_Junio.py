@@ -532,7 +532,7 @@ with tab1:
                                  ]],  hide_index=True)
 
 
-with tab2:
+with tab2: 
     st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",
                  y='Valor fondo', height=450)
 
