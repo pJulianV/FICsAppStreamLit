@@ -443,7 +443,7 @@ df_downlTempEnt
 
 with tab4: 
     st.bar_chart(df_downlTempEnt, x="Nombre administradora",
-                 y='Valor fondo millones', height=450)
+                 y='Valor fondo millones', height=450, color=['#FF0000', '#0000FF'])
  #   fig = px.scatter(
   #      df_downlTempEnt,
     #     x="Rentabilidad neta mensual",
