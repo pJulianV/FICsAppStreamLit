@@ -441,18 +441,20 @@ df_downlTempEnt = df_downlTemp
 df_downlTempEnt.groupby("Nombre administradora").sum()
 
 
-with tab4:
-    fig = px.scatter(
-        df_downlTempEnt,
-        x="Rentabilidad neta mensual",
-        y="Volatilidad mensual",
-        # size="Nombre administradora",
-        color="Nombre administradora",
-        hover_name="Valor fondo",
-        # log_x=True,
-        size_max=150,
-    )
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+with tab4: 
+    st.bar_chart(df_downlTemp, x="Nombre entidad", 
+                 y='Valor fondo millones', height=450)
+ #   fig = px.scatter(
+  #      df_downlTempEnt,
+    #     x="Rentabilidad neta mensual",
+    #     y="Volatilidad mensual",
+    #     # size="Nombre administradora",
+    #     color="Nombre administradora",
+    #     hover_name="Valor fondo",
+    #     # log_x=True,
+    #     size_max=150,
+    # )
+    # st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 col1, col2, col3 = st.columns(3)
 
@@ -595,18 +597,20 @@ dfdownlSIFTempEnt = dfdownlSIFTemp
 dfdownlSIFTempEnt.groupby("Nombre administradora").sum()
 
 
-with tab4:
-    fig = px.scatter(
-        dfdownlSIFTempEnt,
-        x="Rentabilidad neta mensual",
-        y="Volatilidad mensual",
-        # size="Nombre administradora",
-        color="Nombre administradora",
-        hover_name="Valor fondo",
-        # log_x=True,
-        size_max=150,
-    )
-    st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+with tab4: 
+    st.bar_chart(df_downlTemp, x="Nombre entidad", 
+                 y='Valor fondo millones', height=450)
+ #   fig = px.scatter(
+  #      dfdownlSIFTempEnt,
+    #     x="Rentabilidad neta mensual",
+    #     y="Volatilidad mensual",
+    #     # size="Nombre administradora",
+    #     color="Nombre administradora",
+    #     hover_name="Valor fondo",
+    #     # log_x=True,
+    #     size_max=150,
+    # )
+    # st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
         
 dfdownlSIF['Valor fondo'] = dfdownlSIF['Valor fondo'].map("{:,.2f}".format)
