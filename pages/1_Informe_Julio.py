@@ -549,8 +549,8 @@ def convertirAMillones(x):
     return x / 1000000
 
 
-dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
-    convertirAMillones)
+# dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
+    # convertirAMillones)
 
 
 
@@ -563,7 +563,7 @@ with tab1:
 
 with tab2:
     st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",
-                 y='Valor fondo', height=450)
+                 y='Valor fondo millones', height=450)
 
    
 with tab3:
