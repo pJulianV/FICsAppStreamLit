@@ -582,7 +582,7 @@ with tab4:
         dfdownlSIFTempEnt,
         x="Rentabilidad neta mensual",
         y="Volatilidad mensual",
-        size="Valor fondo",
+        # size="Nombre administradora",
         color="Nombre administradora",
         hover_name="Valor fondo",
         # log_x=True,
