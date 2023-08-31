@@ -544,8 +544,6 @@ dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                     inplace=True, errors='raise')
 
 
-mean_income = dfdownlSIFTemp['income'].mean()
-
 
 def convertirAMillones(x):
     return x / 1000000
