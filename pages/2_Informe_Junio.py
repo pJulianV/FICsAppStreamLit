@@ -424,7 +424,7 @@ with tab3:
 
 with tab4:
     fig = px.scatter(
-        dfdownlSIFTemp,
+        df_downlTemp,
         x="Rentabilidad neta mensual",
         y="Volatilidad mensual",
         # size="Nombre administradora",
