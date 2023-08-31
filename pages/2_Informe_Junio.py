@@ -15,6 +15,7 @@
 
 # ! Los Dataframe con terminacion "NoDupl" es para la visualizacion NO USAR en el excel final
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 # import plotly.express as px
@@ -565,7 +566,16 @@ with tab2:
                 y='Valor fondo millones', height=450)
 
 
+chart_data = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=['col1', 'col2', 'col3'])
 
+st.bar_chart(
+    chart_data,
+    x='col1',
+    y=['col2', 'col3'],
+    color=['#FF0000', '#0000FF']  # Optional
+)
 
 with tab3:
 
