@@ -400,6 +400,12 @@ df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                              'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
                              'NOMBRE CORTO FONDO': 'Nombre fondo'},
                     inplace=True, errors='raise')
+def convertirAMillones(x):
+    return x / 1000000
+
+
+df_downlTemp['Valor fondo millones'] = df_downlTemp['Valor fondo'].map(
+    convertirAMillones)
 
 with tab1:
     st.dataframe(df_downlTemp[['Nombre administradora', 'Nombre fondo',
@@ -545,16 +551,10 @@ dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
 
 
 
-def convertirAMillones(x):
-    return x / 1000000
 
 
 dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
     convertirAMillones)
-
-
-dfdownlSIFTemp['Valor fondo millones']
-dfdownlSIFTemp['Valor fondo']
 
 with tab1:
     st.dataframe(dfdownlSIFTemp[['Nombre administradora', 'Nombre fondo',
