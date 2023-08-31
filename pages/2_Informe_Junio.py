@@ -15,7 +15,6 @@
 
 # ! Los Dataframe con terminacion "NoDupl" es para la visualizacion NO USAR en el excel final
 
-import numpy as np
 import pandas as pd
 import streamlit as st
 # import plotly.express as px
@@ -62,16 +61,6 @@ st.set_page_config(
 
 )
 
-chart_data = pd.DataFrame(
-    np.random.randn(20, 3),
-    columns=['col1', 'col2', 'col3'])
-
-st.bar_chart(
-    chart_data,
-    x='col1',
-    y=['col2', 'col3'],
-    color=['#FF0000', '#0000FF']  # Optional
-)
 hide_github_icon = """
 #GithubIcon {
   visibility: hidden;
@@ -574,6 +563,7 @@ with tab1:
 with tab2: 
     st.bar_chart(dfdownlSIFTemp, x="Nombre fondo", color='Nombre administradora',
                 y='Valor fondo millones', height=450)
+
 
 
 
