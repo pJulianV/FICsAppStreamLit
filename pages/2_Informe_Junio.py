@@ -62,6 +62,16 @@ st.set_page_config(
 
 )
 
+chart_data = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=['col1', 'col2', 'col3'])
+
+st.bar_chart(
+    chart_data,
+    x='col1',
+    y=['col2', 'col3'],
+    color=['#FF0000', '#0000FF']  # Optional
+)
 hide_github_icon = """
 #GithubIcon {
   visibility: hidden;
@@ -566,16 +576,6 @@ with tab2:
                 y='Valor fondo millones', height=450)
 
 
-chart_data = pd.DataFrame(
-    np.random.randn(20, 3),
-    columns=['col1', 'col2', 'col3'])
-
-st.bar_chart(
-    chart_data,
-    x='col1',
-    y=['col2', 'col3'],
-    color=['#FF0000', '#0000FF']  # Optional
-)
 
 with tab3:
 
