@@ -264,14 +264,12 @@ with st.expander("Abreviaturas"):
 st.success(
 """
    ㅤAl final los fondos que queden dentro de recuadro **\"Nombre Negocio\"** seran los descargados
-""",
-icon=" ",)
+""" )
 
 st.success(
 """
    ㅤLa duración solo está disponible para la muestra de fondos sugeridos
-""",
-icon=" ",)
+""" )
 
 
 
