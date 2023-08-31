@@ -574,7 +574,7 @@ with tab3:
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 dfdownlSIFTempEnt = dfdownlSIFTemp
-dfdownlSIFTempEnt.groupby("First Col").sum()
+dfdownlSIFTempEnt.groupby("Nombre administradora").sum()
 
 
 with tab4:
