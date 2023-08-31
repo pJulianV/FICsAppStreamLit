@@ -435,7 +435,7 @@ with tab3:
 
 df_downlTempEnt = df_downlTemp
 df_downlTempEnt.groupby("Nombre administradora").sum()
-df_downlTempEnt
+
 
 with tab4: 
     st.bar_chart(df_downlTempEnt, x="Nombre administradora",
@@ -589,7 +589,7 @@ with tab3:
 
 dfdownlSIFTempEnt = dfdownlSIFTemp
 dfdownlSIFTempEnt.groupby("Nombre administradora").sum()
-dfdownlSIFTempEnt
+
 
 with tab4: 
     st.bar_chart(dfdownlSIFTempEnt, x="Nombre administradora",
