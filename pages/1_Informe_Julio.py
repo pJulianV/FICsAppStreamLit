@@ -418,6 +418,38 @@ with tab3:
         # log_x=True,
         size_max=150,
     )
+    fig.update_layout(title=dict(font=dict(size=40)))
+    fig.update_layout(title_font_size=40)
+    fig.update_layout(
+        title={
+            'text': "Plot Title",
+            'y': 0.9,
+            'x': 0.9,
+            'xanchor': 'right',
+            'yanchor': 'top'})
+    fig.update_layout(
+        # title="Plot Title",
+        xaxis_title="Nombre Fondo",
+        yaxis_title="Valor Fondo",
+        legend_title="Legend Title",
+        font=dict(
+            family="Courier New, monospace",
+            size=18,
+            color="RebeccaPurple"
+        )
+    )
+    fig.update_layout(
+        title=dict(
+            text='<b>Life Expectancy - Our World in Data</b>',
+            x=0.5,
+            y=0.95,
+            font=dict(
+                family="Arial",
+                size=20,
+                color='#000000'
+            )
+        ))
+    fig.update_layout(font={'size': 30})
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 
