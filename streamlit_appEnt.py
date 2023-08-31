@@ -341,7 +341,7 @@ st.success(
 """
    ㅤAl final los fondos que queden dentro de recuadro **\"Nombre Negocio\"** seran los descargados
 """,
-icon="💵",)
+icon=" ",)
 
 
 
