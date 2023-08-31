@@ -404,7 +404,7 @@ df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
 
 with tab1:
     st.dataframe(df_downlTemp[['Nombre administradora', 'Nombre fondo',
-                           "Nombre fondo"
+                           "Asset Class"
                                 ]],  hide_index=True )
 
 
