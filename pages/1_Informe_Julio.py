@@ -553,7 +553,7 @@ dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
     convertirAMillones)
 
 
-
+dfdownlSIFTemp['Valor fondo millones']
 
 with tab1:
     st.dataframe(dfdownlSIFTemp[['Nombre administradora', 'Nombre fondo',
@@ -581,15 +581,13 @@ with tab3:
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 
-dfdownlSIFTempEnt = dfdownlSIFTemp
-
 
 with tab4:
     fig = px.scatter(
         dfdownlSIFTemp,
         x="Rentabilidad neta mensual",
         y="Volatilidad mensual",
-        size="Nombre administradora",
+        # size="Nombre administradora",
         color="Nombre fondo",
         hover_name="Valor fondo",
         # log_x=True,
