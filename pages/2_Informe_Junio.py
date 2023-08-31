@@ -391,7 +391,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 df_downl =filter_dataframe(filtered_df)
 
 
-tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Lineas", "Grafico Dispersion"])
+tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
 
 with tab1:
     st.dataframe(df_downl[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
@@ -513,7 +513,7 @@ dfdownlSIF =filter_dataframeSIF(dfSIF)
 
 
 
-tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Lineas", "Grafico Dispersion"])
+tab1, tab2, tab3 = st.tabs(["Tabla", "Grafico Columnas", "Grafico Dispersion"])
 
 with tab1:
     st.dataframe(dfdownlSIF[['NOMBRE CORTO ADMINISTRADORA','NOMBRE CORTO FONDO',
