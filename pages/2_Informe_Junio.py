@@ -436,7 +436,7 @@ with tab4:
         x="Rentabilidad neta mensual",
         y="Volatilidad mensual",
         # size="Nombre administradora",
-        color="Nombre fondo",
+        color="Nombre administradora",
         hover_name="Valor fondo",
         # log_x=True,
         size_max=150,
@@ -573,13 +573,17 @@ with tab3:
     )
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
+dfdownlSIFTempEnt = dfdownlSIFTemp
+dfdownlSIFTempEnt.groupby("First Col").sum()
+
+
 with tab4:
     fig = px.scatter(
-        dfdownlSIFTemp,
+        dfdownlSIFTempEnt,
         x="Rentabilidad neta mensual",
         y="Volatilidad mensual",
         # size="Nombre administradora",
-        color="Nombre fondo",
+        color="Nombre administradora",
         hover_name="Valor fondo",
         # log_x=True,
         size_max=150,
