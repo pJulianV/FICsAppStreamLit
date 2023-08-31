@@ -24,13 +24,13 @@ def run():
         page_icon="👋",
     )
 
-    st.write("# ¡Bienvenid@ a nuestra App de Fondos de Inversión! 👋")
+    st.write("# ¡Bienvenid@ a nuestra Informe de Fondos de Inversión! 👋")
 
     st.markdown(
         """
         Nuestra aplicación web está diseñada para ayudarte a explorar y analizar diversas opciones de fondos de inversión. 👈 Selecciona un filtro en la barra lateral para ver ejemplos de cómo puedes utilizar nuestra aplicación y encontrar los fondos que se ajusten a tus necesidades.
         ### ¿Quieres saber mas?
-        - Selecciona la fecha que desees
+        - Selecciona el mes que desees
         - Usa los filtros para seleccionar los fondos de la base de datos
         - Los fondos filtrados seran los descargados
         ### ¿Tienes dudas o sugerencias?

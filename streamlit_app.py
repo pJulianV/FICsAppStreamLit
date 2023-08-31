@@ -392,7 +392,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
             df = df[df[column].isin(user_cat_input)]
 
     
-    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
+    st.bar_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
 
     return df
 
@@ -463,7 +463,7 @@ def filter_dataframeSIF(df: pd.DataFrame) -> pd.DataFrame:
 
             df = df[df[column].isin(user_cat_input)]
 
-    st.line_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
+    st.bar_chart(df,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 900)
     return df
 
 st.text(" ")

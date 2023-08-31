@@ -531,5 +531,5 @@ st.info(
 
 
 
-st.line_chart(dfdownlSIF, y = "Valor fondo")
-st.line_chart(df_downl, y = "Valor fondo")
+st.bar_chart(dfdownlSIF, y = "Valor fondo")
+st.bar_chart(df_downl, y = "Valor fondo")

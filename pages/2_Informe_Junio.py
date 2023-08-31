@@ -400,7 +400,7 @@ with tab1:
 
 
 with tab2:
-    st.line_chart(df_downl,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
+    st.bar_chart(df_downl,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
 
 
 
@@ -522,7 +522,7 @@ with tab1:
 
 
 with tab2:
-    st.line_chart(dfdownlSIF,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
+    st.bar_chart(dfdownlSIF,x="NOMBRE CORTO FONDO", y = 'Valor fondo', height = 450)
 
 
 with tab3:
