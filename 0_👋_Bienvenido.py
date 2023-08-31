@@ -26,7 +26,7 @@ def run():
 
     st.write("# ¡Bienvenid@ a nuestra Informe de Fondos de Inversión! 👋")
 
-    st.markdown(
+    st.markdown( 
         """
         Nuestro informe está diseñado para ayudarte a explorar y analizar diversas opciones de fondos de inversión. 👈 Selecciona un filtro en la barra lateral para ver ejemplos de cómo puedes utilizar nuestra aplicación y encontrar los fondos que se ajusten a tus necesidades.
         ### ¿Quieres saber mas?
