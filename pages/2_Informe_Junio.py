@@ -434,7 +434,7 @@ with tab3:
     st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
 with tab4: 
-    st.bar_chart(df_downlTemp, x="Nombre entidad", 
+    st.bar_chart(df_downlTemp, x="Nombre administradora", 
                  y='Valor fondo millones', height=450)
  #   fig = px.scatter(
   #      df_downlTemp,
@@ -588,7 +588,7 @@ dfdownlSIFTempEnt.groupby("Nombre administradora").sum()
 
 
 with tab4: 
-    st.bar_chart(df_downlTemp, x="Nombre entidad", 
+    st.bar_chart(df_downlTemp, x="Nombre administradora", 
                  y='Valor fondo millones', height=450)
  #   fig = px.scatter(
   #      dfdownlSIFTempEnt,
