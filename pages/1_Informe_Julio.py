@@ -549,8 +549,8 @@ def convertirAMillones(x):
     return x / 1000000
 
 
-# dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
-    # convertirAMillones)
+dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
+    convertirAMillones)
 
 
 
