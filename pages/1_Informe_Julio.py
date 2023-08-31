@@ -415,8 +415,9 @@ with tab1:
 
 
 with tab2:
-    st.bar_chart(df_downlTemp, x="Nombre fondo",
-                 y='Valor fondo millones', height=450, color = 'Tipo participacion')
+    st.bar_chart(df_downlTemp, x="Nombre fondo",color = 'Tipo participacion',
+                y='Valor fondo millones', height=450)
+
 
    
 with tab3:
@@ -569,8 +570,9 @@ with tab1:
 
 
 with tab2:
-    st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",
-                 y='Valor fondo millones', height=450, color = 'Tipo participacion')
+    st.bar_chart(dfdownlSIFTemp, x="Nombre fondo",color = 'Tipo participacion',
+                y='Valor fondo millones', height=450)
+
 
    
 with tab3:
