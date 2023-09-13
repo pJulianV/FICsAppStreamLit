@@ -149,35 +149,7 @@ dfSIF["Fecha corte"] = "30/08/2023"
 
 
 
-# filtered_df = dfSIF.dropna()
-
-listaFondosDF = pd.read_excel("ListaFondosSug.xlsx",
-                   sheet_name= sheet_name,
-                   header=0,
-                   usecols = "A"
-                   )
-
-
-listaFondos = listaFondosDF.values.tolist()
-
-filtered_df = pd.DataFrame()
-
-
-for i in range(dfSIF.shape[0]):
-
-    nombreFondo = dfSIF["NOMBRE CORTO FONDO"][i]
-    if nombreFondo in listaFondos:
-
-        filtered_df = filtered_df.append( dfSIF.iloc[:, [i]],
-                                        ignore_index=True
-                                        )
-    else:
-
-        pass
-
-
-
-
+filtered_df = dfSIF.dropna()
 
 st.text(" ")
 st.text(" ")
