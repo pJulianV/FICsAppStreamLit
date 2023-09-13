@@ -127,7 +127,7 @@ with contents:
 st.text(" ")
 
 
-img = Image.open("inversion.jpg")
+img = Image.open("invesment.jpeg")
 st.image(img, use_column_width=True)
 
 
