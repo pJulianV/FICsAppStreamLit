@@ -408,6 +408,18 @@ def convertirAMillones(x):
 df_downlTemp['Valor fondo millones'] = df_downlTemp['Valor fondo'].map(
     convertirAMillones)
 
+
+def convertirAProcentaje(x):
+    return x * 100
+
+
+df_downlTemp['Volatilidad anual (%)'] = df_downlTemp['Volatilidad anual'].map(
+    convertirAProcentaje)
+
+df_downlTemp['Rentabilidad bruta anual (%)'] = df_downlTemp['Rentabilidad bruta anual'].map(
+    convertirAProcentaje)
+
+
 with tab1:
     st.dataframe(df_downlTemp[['Nombre administradora', 'Nombre fondo',
                            "Asset Class"
@@ -419,15 +431,14 @@ with tab2:
                 y='Valor fondo millones', height=450)
 
 
-
    
 with tab3:
 
 
     fig = px.scatter(
         df_downlTemp,
-        x="Rentabilidad bruta anual",
-        y="Volatilidad anual",
+        x="Rentabilidad bruta anual (%)",
+        y="Volatilidad anual (%)",
         # size="Nombre administradora",
         color="Nombre fondo",
         hover_name="Nombre administradora",
@@ -566,6 +577,12 @@ dfdownlSIFTemp.rename(columns={'V. 1Y': 'Volatilidad anual',
 dfdownlSIFTemp['Valor fondo millones'] = dfdownlSIFTemp['Valor fondo'].map(
     convertirAMillones)
 
+dfdownlSIFTemp['Volatilidad anual (%)'] = dfdownlSIFTemp['Volatilidad anual'].map(
+    convertirAProcentaje)
+
+dfdownlSIFTemp['Rentabilidad bruta anual (%)'] = dfdownlSIFTemp['Rentabilidad bruta anual'].map(
+    convertirAProcentaje)
+
 with tab1:
     st.dataframe(dfdownlSIFTemp[['Nombre administradora', 'Nombre fondo',
                                   "Asset Class"
@@ -583,8 +600,8 @@ with tab3:
     
     fig = px.scatter(
         dfdownlSIFTemp,
-        x="Rentabilidad bruta anual",
-        y="Volatilidad anual",
+        x="Rentabilidad bruta anual (%)",
+        y="Volatilidad anual (%)",
         # # size="Nombre administradora",
         color="Nombre fondo",
         hover_name="Nombre administradora",
