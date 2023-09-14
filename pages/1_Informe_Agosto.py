@@ -388,7 +388,7 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
 df_downl =filter_dataframe(filtered_df)
 
-tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Grafico Columnas Fondo", "Grafico Dispersion Fondo", "Grafico Columnas Entidad" ])
+tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Gráfico Columnas Fondo", "Gráfico Dispersión Fondo", "Gráfico Columnas Entidad" ])
 df_downlTemp = df_downl
 df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
                              'RN.mensual': 'Rentabilidad neta mensual',
@@ -545,7 +545,7 @@ dfdownlSIF =filter_dataframeSIF(dfSIF)
 # dfdownlSIFNoDupl = dfdownlSIF.drop_duplicates(subset=["NOMBRE CORTO FONDO"], keep='first')
 
 
-tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Grafico Columnas Fondo", "Grafico Dispersion Fondo", "Grafico Columnas Entidad" ])
+tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Gráfico Columnas Fondo", "Gráfico Dispersión Fondo", "Gráfico Columnas Entidad" ])
 dfdownlSIFTemp = dfdownlSIF
 
 
