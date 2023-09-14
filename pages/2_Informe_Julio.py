@@ -395,8 +395,8 @@ df_downl =filter_dataframe(filtered_df)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Gráfico Columnas Fondo", "Gráfico Dispersión Fondo", "Gráfico Columnas Entidad" ])
 df_downlTemp = df_downl
-df_downlTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
-                             'RN.mensual': 'Rentabilidad neta mensual',
+df_downlTemp.rename(columns={'V. 1Y': 'Volatilidad anual',
+                             'RB. 1Y': 'Rentabilidad bruta anual',
                              'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
                                'TIPO DE PARTICIPACIÓN': 'Tipo participacion',
                              'NOMBRE CORTO FONDO': 'Nombre fondo'},
@@ -426,8 +426,8 @@ with tab3:
 
     fig = px.scatter(
         df_downlTemp,
-        x="Rentabilidad neta mensual",
-        y="Volatilidad mensual",
+        x="Rentabilidad bruta anual",
+        y="Volatilidad anual",
         # size="Nombre administradora",
         color="Nombre fondo",
         hover_name="Nombre administradora",
@@ -446,8 +446,8 @@ with tab4:
                  y='Valor fondo millones', height=450)
  #   fig = px.scatter(
   #      df_downlTempEnt,
-    #     x="Rentabilidad neta mensual",
-    #     y="Volatilidad mensual",
+    #     x="Rentabilidad bruta anual",
+    #     y="Volatilidad anual",
     #     # size="Nombre administradora",
     #     color="Nombre administradora",
     #     hover_name="Valor fondo",
@@ -552,8 +552,8 @@ dfdownlSIF =filter_dataframeSIF(dfSIF)
 
 tab1, tab2, tab3, tab4 = st.tabs(["Tabla", "Gráfico Columnas Fondo", "Gráfico Dispersión Fondo", "Gráfico Columnas Entidad" ])
 dfdownlSIFTemp = dfdownlSIF
-dfdownlSIFTemp.rename(columns={'V.mensual': 'Volatilidad mensual',
-                             'RN.mensual': 'Rentabilidad neta mensual',
+dfdownlSIFTemp.rename(columns={'V. 1Y': 'Volatilidad anual',
+                             'RB. 1Y': 'Rentabilidad bruta anual',
                              'NOMBRE CORTO ADMINISTRADORA': 'Nombre administradora',
                                'TIPO DE PARTICIPACIÓN': 'Tipo participacion',
                              'NOMBRE CORTO FONDO': 'Nombre fondo'},
@@ -583,8 +583,8 @@ with tab3:
     
     fig = px.scatter(
         dfdownlSIFTemp,
-        x="Rentabilidad neta mensual",
-        y="Volatilidad mensual",
+        x="Rentabilidad bruta anual",
+        y="Volatilidad anual",
         # # size="Nombre administradora",
         color="Nombre fondo",
         hover_name="Nombre administradora",
@@ -602,8 +602,8 @@ with tab4:
                  y='Valor fondo millones', height=450)
  #   fig = px.scatter(
   #      dfdownlSIFTempEnt,
-    #     x="Rentabilidad neta mensual",
-    #     y="Volatilidad mensual",
+    #     x="Rentabilidad bruta anual",
+    #     y="Volatilidad anual",
     #     # size="Nombre administradora",
     #     color="Nombre administradora",
     #     hover_name="Valor fondo",
